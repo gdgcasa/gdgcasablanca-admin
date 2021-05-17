@@ -7,8 +7,11 @@ export default function Home() {
   const [formDataState, setFormDataState] = React.useState<
     Record<string, string | Blob>
   >({})
+  const [loading, setLoading] = React.useState(false)
+
   function handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
     event.preventDefault()
+    setLoading(true)
 
     const formData = new FormData()
 
@@ -16,7 +19,11 @@ export default function Home() {
       formData.append(key, value)
     })
 
-    fetch('/api/members/add', { method: 'POST', body: formData })
+    fetch('/api/members/add', { method: 'POST', body: formData }).finally(() =>
+      setLoading(false),
+    )
+
+    setFormDataState({})
   }
 
   function handleChangle(event: React.FormEvent<HTMLInputElement>) {
@@ -89,6 +96,7 @@ export default function Home() {
 
             <button
               type='submit'
+              disabled={loading}
               className='mt-6 md:mt-8 px-4 py-2 rounded text-white bg-blue-600 hover:bg-blue-800'
             >
               Add member
