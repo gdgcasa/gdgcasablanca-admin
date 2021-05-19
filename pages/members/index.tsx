@@ -6,7 +6,11 @@ import Header from '@/components/header'
 export default function Members() {
   const { data, error } = useSWR<DbMember[]>('/api/members')
 
-  if (error) return <div>failed to load</div>
+  if (error) {
+    console.error(error)
+
+    return <div>failed to load</div>
+  }
   if (!data) return <div>loading...</div>
 
   return (
