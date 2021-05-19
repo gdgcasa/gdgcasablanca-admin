@@ -1,10 +1,10 @@
+import { membersCollection } from 'src/config'
 import { getUniqueName } from 'src/utils'
+
 import firebase from './firebase'
 
 const db = firebase.firestore()
 const storage = firebase.storage()
-
-const membersCollection = 'members'
 
 async function addMember(member: Member) {
   const url = await uploadMemberPhoto(

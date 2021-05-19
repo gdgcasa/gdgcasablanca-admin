@@ -3,8 +3,9 @@ type DbMember = {
   lastname: string
   occupation: string
   photo: string
+  id: string
 }
 
-type Member = Omit<DbMember, 'photo'> & {
+type Member = Omit<DbMember, 'photo', 'id'> & {
   photo: File
 }

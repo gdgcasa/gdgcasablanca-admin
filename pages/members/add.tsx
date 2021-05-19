@@ -30,7 +30,7 @@ export default function Home() {
 
       ct.reset()
       setFormDataState(initialState)
-      router.push('/')
+      router.push('/members')
     } catch (error) {
       console.error(error)
     }
@@ -121,7 +121,7 @@ export default function Home() {
               type='submit'
               disabled={loading}
               className={`mt-6 md:mt-8 px-4 py-2 rounded text-white transition-colors ${
-                loading ? 'bg-blue-300' : 'bg-green-600 hover:bg-green-800'
+                loading ? 'bg-green-300' : 'bg-green-600 hover:bg-green-800'
               }`}
             >
               Add member
