@@ -21,7 +21,7 @@ export default function Members() {
 
       <main>
         <section className='flex flex-col gap-y-4 p-4 md:p-8 md:max-w-4xl mx-auto'>
-          {data.map(({ firstname, lastname, id, photo, occupation }) => {
+          {data.map(({ firstname, lastname, id, photo, occupation, url }) => {
             const fullname = [firstname, lastname].join(' ')
             return (
               <div key={id} className='flex gap-x-3 items-center'>
@@ -33,6 +33,11 @@ export default function Members() {
                 <div>
                   <h3 className='text-lg text-gray-900'>{fullname}</h3>
                   <p className='text-sm text-gray-700'>{occupation}</p>
+                  {!url ? null : (
+                    <a href={url} target='_blank' rel='noopener noreferrer'>
+                      {url}
+                    </a>
+                  )}
                 </div>
               </div>
             )

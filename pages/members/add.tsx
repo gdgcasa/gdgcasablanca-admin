@@ -8,6 +8,7 @@ import { addMember } from '@/lib/db'
 
 const initialState = {
   firstname: '',
+  url: '',
   lastname: '',
   occupation: '',
   photo: null,
@@ -101,6 +102,16 @@ export default function Home() {
                   onChange: handleChangle,
                   required: true,
                 }}
+              />
+
+              <Input
+                id='url'
+                name='url'
+                type='url'
+                label='Social media link:'
+                description='(include "https")'
+                placeholder='facebook.com/..., twitter.com/...'
+                inputProps={{ autoComplete: 'off', onChange: handleChangle }}
               />
 
               <Input
