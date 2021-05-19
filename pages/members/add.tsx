@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import Input from '@/components/input'
+import Header from '@/components/header'
 import { addMember } from '@/lib/db'
 
 const initialState = {
@@ -55,6 +56,8 @@ export default function Home() {
         <meta name='description' content='Admin - GDG Casablanca' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
+
+      <Header />
 
       <main>
         <section className='p-4 md:p-8 md:max-w-4xl mx-auto'>

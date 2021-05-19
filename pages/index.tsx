@@ -1,6 +1,8 @@
 import Head from 'next/head'
 import Link from 'next/link'
 
+import Header from '@/components/header'
+
 export default function Home() {
   return (
     <div>
@@ -10,11 +12,9 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <main>
-        <h1 className='p-4 md:p-8 md:max-w-4xl mx-auto text-gray-600 font-bold'>
-          Welcome to <a href='https://gdgcasablanca.com'>GDG Casa admin!</a>
-        </h1>
+      <Header />
 
+      <main>
         <section className='p-4 md:p-8 md:max-w-4xl mx-auto'>
           <Link href='/members/add'>
             <a>Add a member</a>
