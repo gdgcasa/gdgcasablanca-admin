@@ -15,6 +15,12 @@ async function addMember(member: Member) {
   return db.collection(membersCollection).add({ ...member, photo: url })
 }
 
+async function editMember(dbMember: DbMember) {
+  const { id, ...member } = dbMember
+
+  return db.collection(membersCollection).doc(id).update(member)
+}
+
 async function uploadMemberPhoto(photo: File, name: string) {
   const photoPath = `${membersCollection}/${name}`
 
@@ -34,4 +40,4 @@ async function uploadMemberPhoto(photo: File, name: string) {
   return phtoUrl
 }
 
-export { uploadMemberPhoto, addMember }
+export { uploadMemberPhoto, addMember, editMember }

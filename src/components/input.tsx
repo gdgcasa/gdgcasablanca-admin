@@ -22,7 +22,7 @@ export default function Input({
   return (
     <div className='flex flex-col w-full'>
       <label htmlFor={id} className='mb-1 md:mb-2 self-start'>
-        <div className='font-bold'>{label}</div>
+        <div className='text-gray-700'>{label}</div>
         <div className='text-sm text-gray-800'>{description}</div>
       </label>
       <input
