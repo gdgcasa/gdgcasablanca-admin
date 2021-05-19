@@ -55,11 +55,12 @@ export default function Members() {
                   )}
                 </div>
 
-                <Link href={`/members/${id}/edit`}>
-                  <a className='ml-auto px-2 border-2 border-current rounded text-green-600 hover:text-green-800 hover:bg-green-50'>
-                    Edit
-                  </a>
-                </Link>
+                <a
+                  href={`/members/${id}/edit`}
+                  className='ml-auto px-2 border-2 border-current rounded text-green-600 hover:text-green-800 hover:bg-green-50'
+                >
+                  Edit
+                </a>
               </div>
             )
           })}

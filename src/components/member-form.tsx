@@ -19,6 +19,7 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
   const [formDataState, setFormDataState] = React.useState<Member>(
     initialState || defaultInitialState,
   )
+  const [editImage, setEditImage] = React.useState(!initialState?.photo)
   const [loading, setLoading] = React.useState(false)
 
   async function handleSubmit(
@@ -43,13 +44,16 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
   function handleChangle(event: React.FormEvent<HTMLInputElement>) {
     const name = event.currentTarget.name
 
-    let value: string | File = event.currentTarget.value
+    // .trim() works here because we're not setting the value back to the input
+    // Otherwise the user wouldn't be able to add spaces
+    let value: string | File = event.currentTarget.value.trim()
     if (event.currentTarget.type === 'file') {
       value = event.currentTarget.files[0]
     }
 
     setFormDataState((prevData) => ({ ...prevData, [name]: value }))
   }
+
   return (
     <form onSubmit={handleSubmit}>
       <div className='flex flex-col gap-y-4 items-start max-w-sm'>
@@ -106,7 +110,14 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
           }}
         />
 
-        {initialState?.photo ? null : (
+        {!editImage ? (
+          <>
+            <img src={initialState?.photo} alt='' className='w-44 h-44' />
+            <button type='button' onClick={() => setEditImage(true)}>
+              Edit Photo
+            </button>
+          </>
+        ) : (
           <Input
             id='photo'
             name='photo'

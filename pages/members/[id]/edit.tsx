@@ -12,7 +12,7 @@ export default function EditMember() {
     query: { id },
   } = router
 
-  const { data, error, isValidating } = useSWR<DbMember>(`/api/members/${id}`)
+  const { data, error } = useSWR<DbMember>(`/api/members/${id}`)
 
   if (error) {
     console.error(error)
@@ -50,9 +50,7 @@ export default function EditMember() {
           </span>
         </h2>
 
-        {isValidating ? null : (
-          <MemberForm onSubmit={handleSubmit} initialState={data} />
-        )}
+        <MemberForm onSubmit={handleSubmit} initialState={data} />
       </main>
     </div>
   )

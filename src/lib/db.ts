@@ -16,9 +16,20 @@ async function addMember(member: Member) {
 }
 
 async function editMember(dbMember: DbMember) {
+  let photo = dbMember.photo
+  if (typeof dbMember.photo !== 'string') {
+    photo = await uploadMemberPhoto(
+      dbMember.photo,
+      getUniqueName(dbMember.firstname, dbMember.lastname),
+    )
+  }
+
   const { id, ...member } = dbMember
 
-  return db.collection(membersCollection).doc(id).update(member)
+  return db
+    .collection(membersCollection)
+    .doc(id)
+    .update({ ...member, photo })
 }
 
 async function uploadMemberPhoto(photo: File, name: string) {
