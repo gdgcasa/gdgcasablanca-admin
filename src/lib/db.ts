@@ -1,4 +1,4 @@
-import { membersCollection } from 'src/config'
+import { membersCollection, usersCollection } from 'src/config'
 import { getUniqueName } from 'src/utils'
 
 import firebase from './firebase'
@@ -51,4 +51,18 @@ async function uploadMemberPhoto(photo: File, name: string) {
   return phtoUrl
 }
 
-export { uploadMemberPhoto, addMember, editMember }
+async function getUserRole(uid: string): Promise<UserRole> {
+  const dbUser = await db.collection(usersCollection).doc(uid).get()
+
+  if (!dbUser.exists) {
+    throw new Error(`User doen't exist`)
+  }
+
+  return dbUser.get('role')
+}
+
+function createUser(user: Omit<UserType, 'token'>) {
+  return db.collection(usersCollection).doc(user.uid).set(user)
+}
+
+export { uploadMemberPhoto, addMember, editMember, getUserRole, createUser }

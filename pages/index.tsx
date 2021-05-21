@@ -1,7 +1,9 @@
+import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 
 import Header from '@/components/header'
+import getUidFromTokenContext from 'src/utils/get-uid-from-token-context'
 
 export default function Home() {
   return (
@@ -25,4 +27,19 @@ export default function Home() {
       <footer></footer>
     </div>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const uid = await getUidFromTokenContext(context)
+
+  if (!uid) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+
+  return { props: {} }
 }

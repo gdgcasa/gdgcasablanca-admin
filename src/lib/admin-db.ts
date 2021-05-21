@@ -1,4 +1,4 @@
-import { membersCollection } from 'src/config'
+import { membersCollection, usersCollection } from 'src/config'
 
 import admin from './admin-firebase'
 
@@ -24,6 +24,16 @@ async function getMember(id: string): Promise<DbMember | null> {
   return { id: doc.id, ...memberWithoutId }
 }
 
+async function getAdminUserRole(uid: string): Promise<UserRole> {
+  const dbUser = await db.collection(usersCollection).doc(uid).get()
+
+  if (!dbUser.exists) {
+    throw new Error(`User doen't exist`)
+  }
+
+  return dbUser.get('role')
+}
+
 function getItemsFromSnapshot<T extends { id: string }>(
   snapshot: FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData>,
 ) {
@@ -38,4 +48,4 @@ function getItemsFromSnapshot<T extends { id: string }>(
   return items
 }
 
-export { getMembers, getMember }
+export { getMembers, getMember, getAdminUserRole }
