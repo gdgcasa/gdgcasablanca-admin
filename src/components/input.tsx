@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 type IProps = {
-  label: string
+  label?: string
   description?: string
   id?: string
   name?: string
@@ -21,10 +21,12 @@ export default function Input({
 }: IProps) {
   return (
     <div className='flex flex-col w-full'>
-      <label htmlFor={id} className='mb-1 md:mb-2 self-start'>
-        <div className='text-gray-700'>{label}</div>
-        <div className='text-sm text-gray-800'>{description}</div>
-      </label>
+      {!label ? null : (
+        <label htmlFor={id} className='mb-1 md:mb-2 self-start'>
+          <div className='text-gray-700'>{label}</div>
+          <div className='text-sm text-gray-800'>{description}</div>
+        </label>
+      )}
       <input
         type={type}
         id={id}

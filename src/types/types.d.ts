@@ -11,7 +11,7 @@ type Member = Omit<DbMember, 'photo', 'id'> & {
   photo: File
 }
 
-const userRoles = ['user', 'admin', 'aditor'] as const
+const userRoles = ['user', 'admin', 'editor'] as const
 type UserRole = typeof userRoles[number]
 
 type UserType = {

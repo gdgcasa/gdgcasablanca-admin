@@ -34,6 +34,17 @@ async function getAdminUserRole(uid: string): Promise<UserRole> {
   return dbUser.get('role')
 }
 
+async function getUsers() {
+  const snapshot = await db
+    .collection(usersCollection)
+    .where('role', 'in', ['editor', 'admin'])
+    .get()
+
+  const users = getItemsFromSnapshot<DbMember>(snapshot)
+
+  return users
+}
+
 function getItemsFromSnapshot<T extends { id: string }>(
   snapshot: FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData>,
 ) {
@@ -48,4 +59,4 @@ function getItemsFromSnapshot<T extends { id: string }>(
   return items
 }
 
-export { getMembers, getMember, getAdminUserRole }
+export { getMembers, getMember, getAdminUserRole, getUsers }

@@ -10,16 +10,20 @@ const auth = admin.auth()
 export default async function getUidFromTokenContext(
   context: GetServerSidePropsContext<ParsedUrlQuery>,
 ): Promise<string> {
-  const { token } = parseCookie(context.req.headers.cookie)
-
-  const { uid } = (await parseTokenContext(token)) ?? {}
+  const { uid } = (await parseTokenContext(context.req.headers.cookie)) ?? {}
 
   return uid
 }
 
 async function parseTokenContext(
-  token: string,
+  cookie: string,
 ): Promise<admin.auth.DecodedIdToken> {
+  if (!cookie) {
+    return null
+  }
+
+  const { token } = parseCookie(cookie)
+
   if (!token) {
     return null
   }

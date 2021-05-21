@@ -14,12 +14,10 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <Header />
-
       <main>
         <section className='p-4 md:p-8 md:max-w-4xl mx-auto'>
-          <Link href='/members/add'>
-            <a>Add a member</a>
+          <Link href='/login'>
+            <a>Login to access the members list</a>
           </Link>
         </section>
       </main>
@@ -32,10 +30,10 @@ export default function Home() {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const uid = await getUidFromTokenContext(context)
 
-  if (!uid) {
+  if (uid) {
     return {
       redirect: {
-        destination: '/login',
+        destination: '/members',
         permanent: false,
       },
     }
