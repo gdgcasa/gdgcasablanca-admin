@@ -3,8 +3,11 @@ import Link from 'next/link'
 import useSWR from 'swr'
 
 import Header from '@/components/header'
+import { useAuth } from '@/lib/auth'
 
 export default function Members() {
+  const { user } = useAuth()
+  const isAdmin = user?.role === 'admin'
   const { data, error } = useSWR<DbMember[]>('/api/members')
 
   if (error) {
@@ -36,31 +39,40 @@ export default function Members() {
                 <img
                   src={photo}
                   alt={fullname}
-                  className='w-14 h-14 rounded-full'
+                  className='w-14 h-14 object-cover rounded-full'
                 />
                 <div>
                   <h3 className='text-lg text-gray-900 capitalize'>
                     {fullname}
                   </h3>
                   <p className='text-sm text-gray-700'>{occupation}</p>
-                  {!url ? null : (
-                    <a
-                      href={url}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      className='text-sm text-green-500 hover:text-green-700'
-                    >
-                      Social media link
-                    </a>
-                  )}
                 </div>
+                <div className='flex-grow' />
+                {!url ? null : (
+                  <a
+                    href={url}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='text-sm text-green-500 hover:text-green-700'
+                  >
+                    Social media link
+                  </a>
+                )}
 
                 <a
                   href={`/members/${id}/edit`}
-                  className='ml-auto px-2 border-2 border-current rounded text-green-600 hover:text-green-800 hover:bg-green-50'
+                  className='px-2 border-2 border-current rounded text-green-600 hover:text-green-800 hover:bg-green-50'
                 >
                   Edit
                 </a>
+
+                {!isAdmin ? null : (
+                  <Link href={`/members/${id}/delete`}>
+                    <a className='px-2 border-2 border-current rounded text-red-600 hover:text-red-800 hover:bg-red-50'>
+                      Delete
+                    </a>
+                  </Link>
+                )}
               </div>
             )
           })}

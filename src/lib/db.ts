@@ -32,6 +32,18 @@ async function editMember(dbMember: DbMember) {
     .update({ ...member, photo })
 }
 
+async function deleteMember(dbMember: DbMember): Promise<'1' | '0'> {
+  try {
+    await storage.refFromURL(dbMember.photo).delete()
+    await db.collection(membersCollection).doc(dbMember.id).delete()
+  } catch (err) {
+    console.error(err)
+    return '0'
+  }
+
+  return '1'
+}
+
 async function uploadMemberPhoto(photo: File, name: string) {
   const photoPath = `${membersCollection}/${name}`
 
@@ -65,4 +77,11 @@ function createUser(user: Omit<UserType, 'token'>) {
   return db.collection(usersCollection).doc(user.uid).set(user)
 }
 
-export { uploadMemberPhoto, addMember, editMember, getUserRole, createUser }
+export {
+  uploadMemberPhoto,
+  addMember,
+  editMember,
+  deleteMember,
+  getUserRole,
+  createUser,
+}
