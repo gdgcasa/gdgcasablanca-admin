@@ -23,7 +23,7 @@ export default function AdminDash() {
     <>
       <h1 className='text-3xl font-light'>Admin Dash</h1>
 
-      <form onSubmit={handleSubmit} className='flex gap-x-4'>
+      <form onSubmit={handleSubmit} className='flex gap-x-4 mt-2'>
         <div className='max-w-xl'>
           <Input placeholder='Search for new editors' />
         </div>

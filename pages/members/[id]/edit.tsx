@@ -2,7 +2,6 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 
-import Header from '@/components/header'
 import MemberForm from '@/components/member-form'
 import { editMember } from '@/lib/db'
 

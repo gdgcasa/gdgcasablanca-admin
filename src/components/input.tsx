@@ -33,7 +33,7 @@ export default function Input({
         placeholder={placeholder}
         name={name}
         {...inputProps}
-        className='p-2 text-lg rounded border border-gray-500 hover:border-gray-700 focus:border-gray-900'
+        className='px-2 py-1 text-lg rounded border border-gray-500 hover:border-gray-700 focus:border-gray-900'
         aria-label={label}
       />
     </div>

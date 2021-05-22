@@ -16,14 +16,14 @@ export default function Nav() {
     <nav className='flex gap-x-2 items-center'>
       {links.map(({ href, label }) => (
         <Link href={href} key={href}>
-          <a className='text-green-600 border-b-2 border-transparent hover:text-green-800 hover:border-current font-bold transition-colors'>
+          <a className='text-green-600 border-b-2 border-transparent hover:text-green-800 hover:border-current transition-colors'>
             {label}
           </a>
         </Link>
       ))}
       {!isAdmin ? null : (
         <Link href='/admin'>
-          <a className='text-green-600 border-b-2 border-transparent hover:text-green-800 hover:border-current font-bold transition-colors'>
+          <a className='text-green-600 border-b-2 border-transparent hover:text-green-800 hover:border-current transition-colors'>
             Admin Dash
           </a>
         </Link>
@@ -32,7 +32,7 @@ export default function Nav() {
       <div className='ml-auto'>
         {!user ? (
           <Link href='/login'>
-            <a className='text-green-600 border-b-2 border-transparent hover:text-green-800 hover:border-current font-bold transition-colors'>
+            <a className='text-green-600 border-b-2 border-transparent hover:text-green-800 hover:border-current transition-colors'>
               Login
             </a>
           </Link>
@@ -40,9 +40,12 @@ export default function Nav() {
           <button
             type='button'
             onClick={() => signout('/')}
-            className='text-green-600 border-b-2 border-transparent hover:text-green-800 hover:border-current font-bold transition-colors'
+            className='text-green-600 border-b-2 border-transparent hover:text-green-800 hover:border-current transition-colors'
           >
             Log out
+            {user?.role ? (
+              <span className='font-bold capitalize'> ({user?.role})</span>
+            ) : null}
           </button>
         )}
       </div>

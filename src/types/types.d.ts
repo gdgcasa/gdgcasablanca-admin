@@ -1,4 +1,5 @@
 type DbMember = {
+  email: string
   firstname: string
   id: string
   lastname: string

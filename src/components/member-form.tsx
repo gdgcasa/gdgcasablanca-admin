@@ -3,6 +3,7 @@ import * as React from 'react'
 import Input from './input'
 
 const defaultInitialState = {
+  email: '',
   firstname: '',
   url: '',
   lastname: '',
@@ -93,6 +94,20 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
             onChange: handleChangle,
             required: true,
             defaultValue: initialState?.occupation,
+          }}
+        />
+
+        <Input
+          id='email'
+          name='email'
+          label='Email:'
+          placeholder='me@mail.com'
+          type='email'
+          inputProps={{
+            autoComplete: 'off',
+            onChange: handleChangle,
+            required: true,
+            defaultValue: initialState?.email,
           }}
         />
 
