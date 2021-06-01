@@ -12,6 +12,7 @@ type Member = Omit<DbMember, 'photo', 'id'> & {
   photo: File
 }
 
+// This is a duplicate value, check the utils/constants file
 const userRoles = ['user', 'admin', 'editor'] as const
 type UserRole = typeof userRoles[number]
 

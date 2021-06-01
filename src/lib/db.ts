@@ -1,5 +1,5 @@
 import { membersCollection, usersCollection } from 'src/config'
-import { getUniqueName } from 'src/utils'
+import { getItemsFromSnapshot, getUniqueName } from 'src/utils'
 
 import firebase from './firebase'
 
@@ -73,6 +73,25 @@ async function getUserRole(uid: string): Promise<UserRole> {
   return dbUser.get('role')
 }
 
+async function getUsersByEmail(email?: UserType['email']): Promise<UserType[]> {
+  const nonEditorRoles: Extract<UserRole, 'user'>[] = ['user']
+
+  let snapshot = null
+  const snapBase = db
+    .collection(usersCollection)
+    .where('role', 'in', nonEditorRoles)
+
+  if (email) {
+    snapshot = await snapBase.where('email', '==', email).limit(1).get()
+  } else {
+    snapshot = await snapBase.limit(5).get()
+  }
+
+  const users = getItemsFromSnapshot<UserType>(snapshot)
+
+  return users
+}
+
 function createUser(user: Omit<UserType, 'token'>) {
   return db.collection(usersCollection).doc(user.uid).set(user)
 }
@@ -83,5 +102,6 @@ export {
   editMember,
   deleteMember,
   getUserRole,
+  getUsersByEmail,
   createUser,
 }

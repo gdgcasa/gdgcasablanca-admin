@@ -2,25 +2,28 @@ import Link from 'next/link'
 
 import { useAuth } from '@/lib/auth'
 
-const links = [
-  { label: 'Members', href: '/members' },
-  { label: 'Add a member', href: '/members/add' },
-]
-
 export default function Nav() {
   const { user, signout } = useAuth()
 
   const isAdmin = user?.role === 'admin'
+  const canEdit = user?.role === 'admin' || user?.role === 'editor'
 
   return (
     <nav className='flex gap-x-2 items-center'>
-      {links.map(({ href, label }) => (
-        <Link href={href} key={href}>
+      <Link href='/members'>
+        <a className='text-green-600 border-b-2 border-transparent hover:text-green-800 hover:border-current transition-colors'>
+          Members
+        </a>
+      </Link>
+
+      {!canEdit ? null : (
+        <Link href='/members/add'>
           <a className='text-green-600 border-b-2 border-transparent hover:text-green-800 hover:border-current transition-colors'>
-            {label}
+            Add a member
           </a>
         </Link>
-      ))}
+      )}
+
       {!isAdmin ? null : (
         <Link href='/admin'>
           <a className='text-green-600 border-b-2 border-transparent hover:text-green-800 hover:border-current transition-colors'>

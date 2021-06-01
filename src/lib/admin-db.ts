@@ -1,4 +1,5 @@
 import { membersCollection, usersCollection } from 'src/config'
+import { getItemsFromSnapshot } from 'src/utils'
 
 import admin from './admin-firebase'
 
@@ -34,29 +35,30 @@ async function getAdminUserRole(uid: string): Promise<UserRole> {
   return dbUser.get('role')
 }
 
-async function getUsers() {
+async function getEditorUsers(): Promise<UserType[]> {
+  const editorRoles: Exclude<UserRole, 'user'>[] = ['editor', 'admin']
+
   const snapshot = await db
     .collection(usersCollection)
-    .where('role', 'in', ['editor', 'admin'])
+    .where('role', 'in', editorRoles)
     .get()
 
-  const users = getItemsFromSnapshot<DbMember>(snapshot)
+  const users = getItemsFromSnapshot<UserType>(snapshot)
 
   return users
 }
 
-function getItemsFromSnapshot<T extends { id: string }>(
-  snapshot: FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData>,
+async function changeMemberRole(
+  uid: UserType['uid'],
+  newRole: UserType['role'],
 ) {
-  const items: Array<T> = []
-
-  if (!snapshot.empty) {
-    snapshot.forEach((doc) => {
-      items.push({ id: doc.id, ...doc.data() } as T)
-    })
-  }
-
-  return items
+  return db.collection(usersCollection).doc(uid).update({ role: newRole })
 }
 
-export { getMembers, getMember, getAdminUserRole, getUsers }
+export {
+  getMembers,
+  getMember,
+  getAdminUserRole,
+  getEditorUsers,
+  changeMemberRole,
+}

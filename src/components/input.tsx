@@ -8,6 +8,7 @@ type IProps = {
   type?: string
   placeholder?: string
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>
+  className?: string
 }
 
 export default function Input({
@@ -18,9 +19,12 @@ export default function Input({
   id,
   type = 'text',
   inputProps,
+  className,
 }: IProps) {
   return (
-    <div className='flex flex-col w-full'>
+    <div
+      className={['flex flex-col w-full', className].filter(Boolean).join(' ')}
+    >
       {!label ? null : (
         <label htmlFor={id} className='mb-1 md:mb-2 self-start'>
           <div className='text-gray-700'>{label}</div>

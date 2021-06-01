@@ -8,6 +8,7 @@ import { useAuth } from '@/lib/auth'
 export default function Members() {
   const { user } = useAuth()
   const isAdmin = user?.role === 'admin'
+  const canEdit = user?.role === 'admin' || user?.role === 'editor'
   const { data, error } = useSWR<DbMember[]>('/api/members')
 
   if (error) {
@@ -34,7 +35,7 @@ export default function Members() {
             return (
               <div
                 key={id}
-                className='flex gap-x-3 py-2 px-4 md:px-8 items-center hover:bg-gray-50'
+                className='flex gap-x-3 py-2 md:py-4 px-4 md:px-8 rounded items-center hover:bg-gray-100'
               >
                 <img
                   src={photo}
@@ -59,12 +60,14 @@ export default function Members() {
                   </a>
                 )}
 
-                <a
-                  href={`/members/${id}/edit`}
-                  className='px-2 border-2 border-current rounded text-green-600 hover:text-green-800 hover:bg-green-50'
-                >
-                  Edit
-                </a>
+                {!canEdit ? null : (
+                  <a
+                    href={`/members/${id}/edit`}
+                    className='px-2 border-2 border-current rounded text-green-600 hover:text-green-800 hover:bg-green-50'
+                  >
+                    Edit
+                  </a>
+                )}
 
                 {!isAdmin ? null : (
                   <Link href={`/members/${id}/delete`}>
