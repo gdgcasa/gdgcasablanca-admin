@@ -7,7 +7,7 @@ import initMiddleware from '@/lib/init-middlewares'
 // Initialize the cors middleware
 const cors = initMiddleware(
   Cors({
-    origin: ['http://localhost:8000', /\.gdgcasablanca\.com$/],
+    origin: ['http://localhost:8000', 'https://gdgcasablanca.com'],
   }),
 )
 
