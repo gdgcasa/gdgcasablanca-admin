@@ -6,7 +6,7 @@ import firebase from './firebase'
 const db = firebase.firestore()
 const storage = firebase.storage()
 
-async function addMember(member: Member) {
+async function addMember(member: Omit<Member, 'photo'> & { photo: File }) {
   const url = await uploadMemberPhoto(
     member.photo,
     getUniqueName(member.firstname, member.lastname),

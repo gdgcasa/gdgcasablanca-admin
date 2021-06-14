@@ -10,7 +10,7 @@ type DbMember = {
 }
 
 type Member = Omit<DbMember, 'photo' | 'id' | 'isPublic'> & {
-  photo: File
+  photo: File | string
 }
 
 // This is a duplicate value, check the utils/constants file

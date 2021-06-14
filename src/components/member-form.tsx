@@ -125,7 +125,7 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
           }}
         />
 
-        {!editImage ? (
+        {!editImage && typeof initialState?.photo === 'string' ? (
           <>
             <img src={initialState?.photo} alt='' className='w-44 h-44' />
             <button type='button' onClick={() => setEditImage(true)}>
