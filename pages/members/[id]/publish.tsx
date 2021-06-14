@@ -1,16 +1,17 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 import useSWR from 'swr'
 
 import { useAuth } from '@/lib/auth'
-import { deleteMember } from '@/lib/db'
-import { useState } from 'react'
+import { togglePublishMember } from '@/lib/db'
+import getRole from 'src/utils/get-role'
 
-export default function DeleteMember() {
+export default function PublishMember() {
   const [loading, setloading] = useState(false)
   const { user } = useAuth()
-  const isAdmin = user?.role === 'admin'
+  const { canEdit } = getRole(user)
 
   const router = useRouter()
   const {
@@ -19,7 +20,7 @@ export default function DeleteMember() {
 
   const { data: member, error } = useSWR<DbMember>(`/api/members/${id}`)
 
-  if (!isAdmin && typeof window !== 'undefined') {
+  if (!canEdit && typeof window !== 'undefined') {
     router.push('/members')
   }
 
@@ -37,7 +38,7 @@ export default function DeleteMember() {
     event.preventDefault()
     setloading(true)
     try {
-      await deleteMember(member)
+      await togglePublishMember(member)
 
       setloading(false)
       router.push('/members')
@@ -79,20 +80,20 @@ export default function DeleteMember() {
 
         <form onSubmit={handleSubmit} className='mt-4'>
           <p className='text-xl text-gray-800'>
-            Are you sure you want to delete this member?
+            Are you sure you want to {member.isPublic ? 'unpublish' : 'publish'}{' '}
+            this member?
           </p>
-          <p className='text-gray-700 italic'>This action is irreversible</p>
 
           <div className='flex gap-x-4 mt-4'>
             <button
               className={`px-2 py-1 rounded text-white border-2 ${
                 loading
-                  ? 'border-red-400 bg-red-400 cursor-wait'
-                  : 'border-red-700 bg-red-700 hover:bg-red-900 hover:border-red-900'
+                  ? 'border-blue-400 bg-blue-400 cursor-wait'
+                  : 'border-blue-700 bg-blue-700 hover:bg-blue-900 hover:border-blue-900'
               }`}
               disabled={loading}
             >
-              Yes, I'm sure. Delete
+              Yes, I'm sure. {member.isPublic ? 'Unpublish' : 'Publish'}
             </button>
             <Link href={loading ? '' : '/members'}>
               <a className='px-2 py-1 border-2 border-current rounded text-gray-700 hover:text-gray-900 hover:bg-gray-50'>

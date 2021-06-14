@@ -5,8 +5,17 @@ import admin from './admin-firebase'
 
 const db = admin.firestore()
 
-async function getMembers(): Promise<Array<DbMember>> {
-  const snapshot = await db.collection(membersCollection).get()
+async function getMembers(
+  publishedOnly: boolean = true,
+): Promise<Array<DbMember>> {
+  let snapshot = null
+  const snapbase = db.collection(membersCollection)
+
+  if (publishedOnly) {
+    snapshot = await snapbase.where('isPublic', '==', true).get()
+  } else {
+    snapshot = await snapbase.get()
+  }
 
   const members = getItemsFromSnapshot<DbMember>(snapshot)
 

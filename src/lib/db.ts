@@ -12,7 +12,9 @@ async function addMember(member: Member) {
     getUniqueName(member.firstname, member.lastname),
   )
 
-  return db.collection(membersCollection).add({ ...member, photo: url })
+  return db
+    .collection(membersCollection)
+    .add({ ...member, isPublic: false, photo: url })
 }
 
 async function editMember(dbMember: DbMember) {
@@ -36,6 +38,20 @@ async function deleteMember(dbMember: DbMember): Promise<'1' | '0'> {
   try {
     await storage.refFromURL(dbMember.photo).delete()
     await db.collection(membersCollection).doc(dbMember.id).delete()
+  } catch (err) {
+    console.error(err)
+    return '0'
+  }
+
+  return '1'
+}
+
+async function togglePublishMember(dbMember: DbMember): Promise<'1' | '0'> {
+  try {
+    await db
+      .collection(membersCollection)
+      .doc(dbMember.id)
+      .update({ isPublic: !dbMember.isPublic })
   } catch (err) {
     console.error(err)
     return '0'
@@ -77,14 +93,14 @@ async function getUsersByEmail(email?: UserType['email']): Promise<UserType[]> {
   const nonEditorRoles: Extract<UserRole, 'user'>[] = ['user']
 
   let snapshot = null
-  const snapBase = db
+  const snapbase = db
     .collection(usersCollection)
     .where('role', 'in', nonEditorRoles)
 
   if (email) {
-    snapshot = await snapBase.where('email', '==', email).limit(1).get()
+    snapshot = await snapbase.where('email', '==', email).limit(1).get()
   } else {
-    snapshot = await snapBase.limit(5).get()
+    snapshot = await snapbase.limit(5).get()
   }
 
   const users = getItemsFromSnapshot<UserType>(snapshot)
@@ -101,6 +117,7 @@ export {
   addMember,
   editMember,
   deleteMember,
+  togglePublishMember,
   getUserRole,
   getUsersByEmail,
   createUser,

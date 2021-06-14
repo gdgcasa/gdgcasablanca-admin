@@ -5,10 +5,11 @@ type DbMember = {
   lastname: string
   occupation: string
   photo: string
+  isPublic: boolean
   url?: string
 }
 
-type Member = Omit<DbMember, 'photo', 'id'> & {
+type Member = Omit<DbMember, 'photo' | 'id' | 'isPublic'> & {
   photo: File
 }
 

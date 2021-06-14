@@ -15,7 +15,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // Run cors
   await cors(req, res)
 
-  const members = await getMembers(false)
+  const members = await getMembers(true)
 
   res.status(200).json(members)
 }
