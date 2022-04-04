@@ -153,7 +153,7 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
           type='submit'
           disabled={loading}
           className={`rounded px-4 py-2 text-white transition-colors ${
-            loading ? 'bg-green-300' : 'bg-green-600 hover:bg-green-800'
+            loading ? 'bg-teal-300' : 'bg-teal-600 hover:bg-teal-800'
           }`}
         >
           {initialState?.firstname ? 'Update member' : 'Add member'}
@@ -164,8 +164,8 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
             <a
               className={`rounded px-4 py-2 transition-colors ${
                 loading
-                  ? 'text-green-300'
-                  : 'text-green-600 hover:bg-green-100 hover:text-green-800'
+                  ? 'text-teal-300'
+                  : 'text-teal-600 hover:bg-teal-100 hover:text-teal-800'
               }`}
             >
               Cancel

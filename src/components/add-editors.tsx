@@ -60,8 +60,8 @@ export default function AddEditors() {
             <button
               onClick={handleClick}
               type='button'
-              className={`rounded border border-current bg-green-50 px-4 ${
-                updatingRole ? 'text-green-400' : 'text-green-700'
+              className={`rounded border border-current bg-teal-50 px-4 ${
+                updatingRole ? 'text-teal-400' : 'text-teal-700'
               }`}
               disabled={updatingRole}
             >

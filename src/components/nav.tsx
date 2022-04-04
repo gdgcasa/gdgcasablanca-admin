@@ -11,14 +11,14 @@ export default function Nav() {
   return (
     <nav className='flex items-center gap-x-2'>
       <Link href='/members'>
-        <a className='border-b-2 border-transparent text-green-600 transition-colors hover:border-current hover:text-green-800'>
+        <a className='border-b-2 border-transparent text-teal-600 transition-colors hover:border-current hover:text-teal-800'>
           Members
         </a>
       </Link>
 
       {!canEdit ? null : (
         <Link href='/members/add'>
-          <a className='border-b-2 border-transparent text-green-600 transition-colors hover:border-current hover:text-green-800'>
+          <a className='border-b-2 border-transparent text-teal-600 transition-colors hover:border-current hover:text-teal-800'>
             Add a member
           </a>
         </Link>
@@ -26,7 +26,7 @@ export default function Nav() {
 
       {!isAdmin ? null : (
         <Link href='/admin'>
-          <a className='border-b-2 border-transparent text-green-600 transition-colors hover:border-current hover:text-green-800'>
+          <a className='border-b-2 border-transparent text-teal-600 transition-colors hover:border-current hover:text-teal-800'>
             Admin Dash
           </a>
         </Link>
@@ -35,7 +35,7 @@ export default function Nav() {
       <div className='ml-auto'>
         {!user ? (
           <Link href='/login'>
-            <a className='border-b-2 border-transparent text-green-600 transition-colors hover:border-current hover:text-green-800'>
+            <a className='border-b-2 border-transparent text-teal-600 transition-colors hover:border-current hover:text-teal-800'>
               Login
             </a>
           </Link>
@@ -43,7 +43,7 @@ export default function Nav() {
           <button
             type='button'
             onClick={() => signout('/')}
-            className='border-b-2 border-transparent text-green-600 transition-colors hover:border-current hover:text-green-800'
+            className='border-b-2 border-transparent text-teal-600 transition-colors hover:border-current hover:text-teal-800'
           >
             Log out
             {user?.role ? (
