@@ -1,8 +1,19 @@
 import * as React from 'react'
 import Router from 'next/router'
+import {
+  getAdditionalUserInfo,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  onIdTokenChanged,
+  getIdToken,
+  UserCredential,
+} from 'firebase/auth'
 
 import firebase from './firebase'
 import { createUser, getUserRole } from './db'
+
+const auth = firebase.auth()
 
 const statuses = ['idle', 'started', 'resolved'] as const
 type Status = typeof statuses[number]
@@ -46,13 +57,14 @@ function useProvideAuth() {
   const [user, setUser] = React.useState<UserType>(null)
   const [status, setStatus] = React.useState<Status>('started')
 
-  async function handleUser(
-    rawUser,
-    aditionalUserInfo?: firebase.auth.AdditionalUserInfo,
-  ) {
+  async function handleUser(rawUser, isAuthChanged = false) {
     if (rawUser) {
-      const isNewUser = Boolean(aditionalUserInfo?.isNewUser)
-      const user = await formatUser(rawUser, isNewUser)
+      console.log({ rawUser })
+      const additionalUserInfo = isAuthChanged
+        ? { isNewUser: false }
+        : getAdditionalUserInfo(rawUser)
+      const isNewUser = Boolean(additionalUserInfo?.isNewUser)
+      const user = await formatUser(rawUser?.user ?? rawUser, isNewUser)
       const { token, ...userWithoutToken } = user
 
       if (isNewUser) {
@@ -63,7 +75,7 @@ function useProvideAuth() {
       fetch('/api/login', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: user.token }),
+        body: JSON.stringify({ token }),
       })
 
       setUser(user)
@@ -82,45 +94,41 @@ function useProvideAuth() {
 
   const signinWithEmail = (email: string, password: string) => {
     setStatus('started')
-    return firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((response) => {
-        handleUser(response.user, response.additionalUserInfo)
-      })
+
+    return signInWithEmailAndPassword(auth, email, password).then((user) => {
+      handleUser(user)
+    })
   }
 
   const signinWithGoogle = (redirect?: string) => {
     setStatus('started')
-    return firebase
-      .auth()
-      .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-      .then((response) => {
-        handleUser(response.user, response.additionalUserInfo)
+    return signInWithPopup(auth, new firebase.auth.GoogleAuthProvider()).then(
+      (user) => {
+        handleUser(user)
 
         if (redirect) {
           Router.push(redirect)
         }
-      })
+      },
+    )
   }
 
   const signout = (redirect?: string) => {
-    return firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        handleUser(null)
+    return signOut(auth).then(() => {
+      handleUser(null)
 
-        if (redirect) {
-          Router.push(redirect)
-        }
-      })
+      if (redirect) {
+        Router.push(redirect)
+      }
+    })
   }
 
   React.useEffect(() => {
-    const unsubscribe = firebase.auth().onIdTokenChanged(handleUser)
+    const unsubscribe = onIdTokenChanged(auth, (user) => handleUser(user, true))
 
-    return () => unsubscribe()
+    return () => {
+      unsubscribe()
+    }
   }, [])
 
   return {
@@ -137,7 +145,7 @@ const formatUser = async (
   user: firebase.User,
   isNewUser: boolean,
 ): Promise<UserType> => {
-  const token = await user.getIdToken()
+  const token = await getIdToken(user)
   const role: UserRole = isNewUser ? 'user' : await getUserRole(user.uid)
 
   return {

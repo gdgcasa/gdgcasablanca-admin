@@ -1,8 +1,10 @@
+import { useAuth } from '@/lib/auth'
 import useSWR from 'swr'
 
 import AddEditors from '../add-editors'
 
 export default function AdminDash() {
+  const { user } = useAuth()
   const { data, error } = useSWR<Array<UserType>>('/api/users')
 
   if (error) {
@@ -23,20 +25,34 @@ export default function AdminDash() {
 
       <section className='py-6'>
         <h2>Admins</h2>
-        <ul className='list-disc ml-6'>
+        <ul className='ml-6 list-disc'>
           {admins.map((admin) => {
-            return <li key={admin.uid}>{admin.name}</li>
+            return (
+              <li key={admin.uid}>
+                {admin.name}
+                {isMe({ curr: admin, user: user })}
+              </li>
+            )
           })}
         </ul>
       </section>
       <section className='py-4'>
         <h2>Editor</h2>
-        <ul className='list-disc ml-6'>
+        <ul className='ml-6 list-disc'>
           {editors.map((editor) => {
-            return <li key={editor.uid}>{editor.name}</li>
+            return (
+              <li key={editor.uid}>
+                {editor.name}
+                {isMe({ curr: editor, user: user })}
+              </li>
+            )
           })}
         </ul>
       </section>
     </>
   )
+}
+
+function isMe({ curr, user }: { curr: UserType; user: UserType }) {
+  return curr.uid === user.uid ? ' (Me)' : null
 }

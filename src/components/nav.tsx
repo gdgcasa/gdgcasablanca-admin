@@ -9,16 +9,16 @@ export default function Nav() {
   const canEdit = user?.role === 'admin' || user?.role === 'editor'
 
   return (
-    <nav className='flex gap-x-2 items-center'>
+    <nav className='flex items-center gap-x-2'>
       <Link href='/members'>
-        <a className='text-green-600 border-b-2 border-transparent hover:text-green-800 hover:border-current transition-colors'>
+        <a className='border-b-2 border-transparent text-green-600 transition-colors hover:border-current hover:text-green-800'>
           Members
         </a>
       </Link>
 
       {!canEdit ? null : (
         <Link href='/members/add'>
-          <a className='text-green-600 border-b-2 border-transparent hover:text-green-800 hover:border-current transition-colors'>
+          <a className='border-b-2 border-transparent text-green-600 transition-colors hover:border-current hover:text-green-800'>
             Add a member
           </a>
         </Link>
@@ -26,7 +26,7 @@ export default function Nav() {
 
       {!isAdmin ? null : (
         <Link href='/admin'>
-          <a className='text-green-600 border-b-2 border-transparent hover:text-green-800 hover:border-current transition-colors'>
+          <a className='border-b-2 border-transparent text-green-600 transition-colors hover:border-current hover:text-green-800'>
             Admin Dash
           </a>
         </Link>
@@ -35,7 +35,7 @@ export default function Nav() {
       <div className='ml-auto'>
         {!user ? (
           <Link href='/login'>
-            <a className='text-green-600 border-b-2 border-transparent hover:text-green-800 hover:border-current transition-colors'>
+            <a className='border-b-2 border-transparent text-green-600 transition-colors hover:border-current hover:text-green-800'>
               Login
             </a>
           </Link>
@@ -43,7 +43,7 @@ export default function Nav() {
           <button
             type='button'
             onClick={() => signout('/')}
-            className='text-green-600 border-b-2 border-transparent hover:text-green-800 hover:border-current transition-colors'
+            className='border-b-2 border-transparent text-green-600 transition-colors hover:border-current hover:text-green-800'
           >
             Log out
             {user?.role ? (

@@ -53,14 +53,14 @@ export default function AddEditors() {
 
   return (
     <>
-      <div className='flex gap-x-4 mt-2'>
+      <div className='mt-2 flex gap-x-4'>
         {selectedUser ? (
           <>
-            <div className='h-10 flex items-center'>{selectedUser.name}</div>
+            <div className='flex h-10 items-center'>{selectedUser.name}</div>
             <button
               onClick={handleClick}
               type='button'
-              className={`bg-green-50 border border-current rounded px-4 ${
+              className={`rounded border border-current bg-green-50 px-4 ${
                 updatingRole ? 'text-green-400' : 'text-green-700'
               }`}
               disabled={updatingRole}
@@ -71,7 +71,7 @@ export default function AddEditors() {
             <button
               onClick={handleCancel}
               type='button'
-              className={`bg-gray-50 border border-current rounded px-4 ${
+              className={`rounded border border-current bg-gray-50 px-4 ${
                 updatingRole ? 'text-gray-400' : 'text-gray-700'
               }`}
               disabled={updatingRole}
@@ -81,8 +81,8 @@ export default function AddEditors() {
           </>
         ) : (
           <Input
-            placeholder='Search for new editors'
-            className='max-w-md h-10'
+            placeholder='Search for new editors by email'
+            className='h-10 max-w-md'
             inputProps={{
               onChange: (e) => setSearchTerm(e.currentTarget.value),
             }}
@@ -92,16 +92,17 @@ export default function AddEditors() {
 
       <div className='h-5 text-sm'>{!isSearching ? null : 'Searching ...'}</div>
 
-      <div className='flex flex-col gap-y-1 items-start'>
+      <div className='flex flex-col items-start gap-y-1'>
         {users.map((user) => {
           return (
             <button
               type='button'
               key={user.uid}
-              className='p-2 bg-gray-100 hover:bg-gray-200 rounded'
+              className='flex items-center gap-2 rounded bg-gray-100 px-3 py-2 hover:bg-gray-200'
               disabled={selectedUser?.uid === user.uid}
               onClick={handleSelectedUser(user)}
             >
+              <img className='h-6 w-6 rounded-full' src={user.photoUrl} />
               {user.name}
             </button>
           )

@@ -57,7 +57,7 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className='flex flex-col gap-y-4 items-start max-w-sm'>
+      <div className='flex max-w-sm flex-col items-start gap-y-4'>
         <Input
           id='firstname'
           name='firstname'
@@ -127,7 +127,7 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
 
         {!editImage && typeof initialState?.photo === 'string' ? (
           <>
-            <img src={initialState?.photo} alt='' className='w-44 h-44' />
+            <img src={initialState?.photo} alt='' className='h-44 w-44' />
             <button type='button' onClick={() => setEditImage(true)}>
               Edit Photo
             </button>
@@ -148,11 +148,11 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
         )}
       </div>
 
-      <div className='flex gap-x-2 mt-6 md:mt-8'>
+      <div className='mt-6 flex gap-x-2 md:mt-8'>
         <button
           type='submit'
           disabled={loading}
-          className={`px-4 py-2 rounded text-white transition-colors ${
+          className={`rounded px-4 py-2 text-white transition-colors ${
             loading ? 'bg-green-300' : 'bg-green-600 hover:bg-green-800'
           }`}
         >
@@ -162,10 +162,10 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
         {!initialState?.firstname ? null : (
           <Link href='/members'>
             <a
-              className={`px-4 py-2 rounded transition-colors ${
+              className={`rounded px-4 py-2 transition-colors ${
                 loading
                   ? 'text-green-300'
-                  : 'text-green-600 hover:text-green-800 hover:bg-green-100'
+                  : 'text-green-600 hover:bg-green-100 hover:text-green-800'
               }`}
             >
               Cancel

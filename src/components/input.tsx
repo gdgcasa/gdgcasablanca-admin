@@ -23,10 +23,10 @@ export default function Input({
 }: IProps) {
   return (
     <div
-      className={['flex flex-col w-full', className].filter(Boolean).join(' ')}
+      className={['flex w-full flex-col', className].filter(Boolean).join(' ')}
     >
       {!label ? null : (
-        <label htmlFor={id} className='mb-1 md:mb-2 self-start'>
+        <label htmlFor={id} className='mb-1 self-start md:mb-2'>
           <div className='text-gray-700'>{label}</div>
           <div className='text-sm text-gray-800'>{description}</div>
         </label>
@@ -37,7 +37,7 @@ export default function Input({
         placeholder={placeholder}
         name={name}
         {...inputProps}
-        className='px-2 py-1 text-lg rounded border border-gray-500 hover:border-gray-700 focus:border-gray-900'
+        className='rounded border border-gray-500 px-2 py-1 text-lg hover:border-gray-700 focus:border-gray-900'
         aria-label={label}
       />
     </div>
