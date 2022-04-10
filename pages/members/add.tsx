@@ -2,12 +2,13 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
-import Header from '@/components/header'
+import HeaderOld from '@/components/header-old'
 import MemberForm from '@/components/member-form'
 import { addMember } from '@/lib/db'
 import getUidFromTokenContext from 'src/utils/get-uid-from-token-context'
 import { getAdminUserRole } from '@/lib/admin-db'
 import { useAuth } from '@/lib/auth'
+import DefaultHead from '@/components/default-head'
 
 export default function Home() {
   const router = useRouter()
@@ -16,16 +17,12 @@ export default function Home() {
   if (loading) {
     return (
       <div>
-        <Head>
-          <title>Add a member - GDG Casablanca Admin</title>
-          <meta name='description' content='Admin - GDG Casablanca' />
-          <link rel='icon' href='/favicon.ico' />
-        </Head>
+        <DefaultHead title='Add a member' />
 
-        <Header />
+        <HeaderOld />
 
         <main>
-          <section className='p-4 md:p-8 md:max-w-4xl mx-auto'>
+          <section className='mx-auto p-4 md:max-w-4xl md:p-8'>
             loading ...
           </section>
         </main>
@@ -51,17 +48,13 @@ export default function Home() {
 
   return (
     <div>
-      <Head>
-        <title>Add a member - GDG Casablanca Admin</title>
-        <meta name='description' content='Admin - GDG Casablanca' />
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
+      <DefaultHead title='Add a member' />
 
-      <Header />
+      <HeaderOld />
 
       <main>
-        <section className='p-4 md:p-8 md:max-w-4xl mx-auto'>
-          <h2 className=' mb-4 md:mb-6 text-2xl md:text-4xl font-light'>
+        <section className='mx-auto p-4 md:max-w-4xl md:p-8'>
+          <h2 className=' mb-4 text-2xl font-light md:mb-6 md:text-4xl'>
             Add a member
           </h2>
 

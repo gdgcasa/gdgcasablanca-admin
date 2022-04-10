@@ -1,12 +1,12 @@
 import DefaultHead from '@/components/default-head'
-import MembersScreen from '@/components/screens/members'
+import AdminsScreen from '@/components/screens/admins'
 
 export default function MembersPage() {
   return (
     <div className='text-slate-900'>
-      <DefaultHead title='Members' />
+      <DefaultHead title='Admins' />
 
-      <MembersScreen />
+      <AdminsScreen />
     </div>
   )
 }

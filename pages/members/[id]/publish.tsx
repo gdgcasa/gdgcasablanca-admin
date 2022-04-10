@@ -1,9 +1,10 @@
-import Head from 'next/head'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useSWR from 'swr'
 
+import DefaultHead from '@/components/default-head'
 import { useAuth } from '@/lib/auth'
 import { togglePublishMember } from '@/lib/db'
 import getRole from 'src/utils/get-role'
@@ -31,7 +32,7 @@ export default function PublishMember() {
   }
 
   if (!id || !member) {
-    return <div>Loading ...</div>
+    return <div className='mx-auto p-4 md:max-w-4xl md:p-8'>Loading ...</div>
   }
 
   async function handleSubmit(event): Promise<void> {
@@ -49,13 +50,9 @@ export default function PublishMember() {
 
   return (
     <div>
-      <Head>
-        <title>Edit member - GDG Casablanca Admin</title>
-        <meta name='description' content='Admin - GDG Casablanca' />
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
+      <DefaultHead title='Edit member' />
 
-      <main className='p-4 md:p-8 md:max-w-4xl mx-auto'>
+      <main className='mx-auto p-4 md:max-w-4xl md:p-8'>
         <h2 className='mb-4 text-2xl'>
           Managing{' '}
           <span className='font-bold text-gray-700'>
@@ -63,14 +60,16 @@ export default function PublishMember() {
           </span>
         </h2>
 
-        <div className='inline-flex gap-x-4 items-center p-4 md:p-8 bg-gray-50 shadow rounded-lg'>
-          <img
+        <div className='inline-flex items-center gap-x-4 rounded-lg bg-gray-50 p-4 shadow md:p-8'>
+          <Image
             src={member.photo}
             alt={`${member.firstname} ${member.lastname}`}
-            className='w-28 h-28 rounded-full object-cover'
+            className='rounded-full'
+            width={112}
+            height={112}
           />
           <div>
-            <div className='text-xl capitalize font-bold'>
+            <div className='text-xl font-bold capitalize'>
               {member.firstname} {member.lastname}
             </div>
             <div>{member.occupation}</div>
@@ -84,19 +83,19 @@ export default function PublishMember() {
             this member?
           </p>
 
-          <div className='flex gap-x-4 mt-4'>
+          <div className='mt-4 flex gap-x-4'>
             <button
-              className={`px-2 py-1 rounded text-white border-2 ${
+              className={`rounded border-2 px-2 py-1 text-white ${
                 loading
-                  ? 'border-blue-400 bg-blue-400 cursor-wait'
-                  : 'border-blue-700 bg-blue-700 hover:bg-blue-900 hover:border-blue-900'
+                  ? 'cursor-wait border-blue-400 bg-blue-400'
+                  : 'border-blue-700 bg-blue-700 hover:border-blue-900 hover:bg-blue-900'
               }`}
               disabled={loading}
             >
               Yes, I'm sure. {member.isPublic ? 'Unpublish' : 'Publish'}
             </button>
             <Link href={loading ? '' : '/members'}>
-              <a className='px-2 py-1 border-2 border-current rounded text-gray-700 hover:text-gray-900 hover:bg-gray-50'>
+              <a className='rounded border-2 border-current px-2 py-1 text-gray-700 hover:bg-gray-50 hover:text-gray-900'>
                 Nope, cancel
               </a>
             </Link>

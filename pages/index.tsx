@@ -1,34 +1,15 @@
 import { GetServerSideProps } from 'next'
-import Head from 'next/head'
-import Link from 'next/link'
 
+import DefaultHead from '@/components/default-head'
+import HomeScreen from '@/components/screens/home-screen'
 import getUidFromTokenContext from 'src/utils/get-uid-from-token-context'
-import { useAuth } from '@/lib/auth'
 
-export default function Home() {
-  const { loading } = useAuth()
-
+export default function HomeV2() {
   return (
-    <div>
-      <Head>
-        <title>GDG Casablanca Admin</title>
-        <meta name='description' content='Admin - GDG Casablanca' />
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
+    <div className='text-slate-900'>
+      <DefaultHead />
 
-      <main>
-        <section className='p-4 md:p-8 md:max-w-4xl mx-auto'>
-          {loading ? (
-            <div>Loading ...</div>
-          ) : (
-            <Link href='/login'>
-              <a>Login to access the members list</a>
-            </Link>
-          )}
-        </section>
-      </main>
-
-      <footer></footer>
+      <HomeScreen />
     </div>
   )
 }
@@ -45,5 +26,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  return { props: {} }
+  return {
+    redirect: {
+      destination: '/login',
+      permanent: false,
+    },
+  }
 }

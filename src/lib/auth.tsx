@@ -59,7 +59,6 @@ function useProvideAuth() {
 
   async function handleUser(rawUser, isAuthChanged = false) {
     if (rawUser) {
-      console.log({ rawUser })
       const additionalUserInfo = isAuthChanged
         ? { isNewUser: false }
         : getAdditionalUserInfo(rawUser)

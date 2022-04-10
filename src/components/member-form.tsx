@@ -1,5 +1,8 @@
+import equal from 'fast-deep-equal/es6/react'
+import Image from 'next/image'
 import Link from 'next/link'
 import * as React from 'react'
+
 import Input from './input'
 
 const defaultInitialState = {
@@ -54,6 +57,11 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
 
     setFormDataState((prevData) => ({ ...prevData, [name]: value }))
   }
+
+  const nothingChanged = React.useMemo(
+    () => equal(initialState, formDataState),
+    [initialState, formDataState],
+  )
 
   return (
     <form onSubmit={handleSubmit}>
@@ -127,7 +135,7 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
 
         {!editImage && typeof initialState?.photo === 'string' ? (
           <>
-            <img src={initialState?.photo} alt='' className='h-44 w-44' />
+            <Image src={initialState?.photo} alt='' width={176} height={176} />
             <button type='button' onClick={() => setEditImage(true)}>
               Edit Photo
             </button>
@@ -148,29 +156,34 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
         )}
       </div>
 
-      <div className='mt-6 flex gap-x-2 md:mt-8'>
+      <div className='mt-6 flex flex-wrap items-baseline gap-4 md:mt-8'>
         <button
           type='submit'
-          disabled={loading}
-          className={`rounded px-4 py-2 text-white transition-colors ${
-            loading ? 'bg-teal-300' : 'bg-teal-600 hover:bg-teal-800'
-          }`}
+          disabled={loading || nothingChanged}
+          className={
+            'rounded bg-teal-600 px-4 py-2 text-white transition-colors hover:bg-teal-800 disabled:bg-teal-400 disabled:text-teal-600'
+          }
         >
           {initialState?.firstname ? 'Update member' : 'Add member'}
         </button>
 
         {!initialState?.firstname ? null : (
-          <Link href='/members'>
-            <a
-              className={`rounded px-4 py-2 transition-colors ${
-                loading
-                  ? 'text-teal-300'
-                  : 'text-teal-600 hover:bg-teal-100 hover:text-teal-800'
-              }`}
-            >
-              Cancel
-            </a>
-          </Link>
+          <>
+            <Link href='/members'>
+              <a
+                className={`rounded border border-current px-4 py-2 transition-colors ${
+                  loading
+                    ? 'text-teal-300'
+                    : 'text-teal-600 hover:bg-teal-100 hover:text-teal-800'
+                }`}
+              >
+                Cancel
+              </a>
+            </Link>
+            {nothingChanged ? null : (
+              <span className='text-slate-600'>You have unsaved changes</span>
+            )}
+          </>
         )}
       </div>
     </form>

@@ -54,5 +54,5 @@ export default function AdminDash() {
 }
 
 function isMe({ curr, user }: { curr: UserType; user: UserType }) {
-  return curr.uid === user.uid ? ' (Me)' : null
+  return curr.uid === user?.uid ? ' (Me)' : null
 }

@@ -45,7 +45,7 @@ export default function Nav() {
             onClick={() => signout('/')}
             className='border-b-2 border-transparent text-teal-600 transition-colors hover:border-current hover:text-teal-800'
           >
-            Log out
+            Logout
             {user?.role ? (
               <span className='font-bold capitalize'> ({user?.role})</span>
             ) : null}

@@ -1,5 +1,5 @@
 import DefaultHead from '@/components/default-head'
-import Header from '@/components/header'
+import HeaderOld from '@/components/header-old'
 import AdminDash from '@/components/screens/admin-dash'
 import { getAdminUserRole } from '@/lib/admin-db'
 import getUidFromTokenContext from 'src/utils/get-uid-from-token-context'
@@ -7,10 +7,10 @@ import getUidFromTokenContext from 'src/utils/get-uid-from-token-context'
 export default function Admin() {
   return (
     <div>
-      <DefaultHead title='Admin - GDG Casablanca admin' />
+      <DefaultHead title='Admin' />
 
-      <Header />
-      <main className='p-4 md:p-8 md:max-w-4xl mx-auto'>
+      <HeaderOld />
+      <main className='mx-auto p-4 md:max-w-4xl md:p-8'>
         <AdminDash />
       </main>
     </div>
