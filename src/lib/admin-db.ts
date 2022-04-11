@@ -45,12 +45,7 @@ async function getAdminUserRole(uid: string): Promise<UserRole> {
 }
 
 async function getEditorUsers(): Promise<UserType[]> {
-  const editorRoles: Exclude<UserRole, 'user'>[] = ['editor', 'admin']
-
-  const snapshot = await db
-    .collection(usersCollection)
-    .where('role', 'in', editorRoles)
-    .get()
+  const snapshot = await db.collection(usersCollection).get()
 
   const users = getItemsFromSnapshot<UserType>(snapshot)
 

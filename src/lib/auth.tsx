@@ -21,6 +21,7 @@ type Status = typeof statuses[number]
 type AuthContextType = {
   user: UserType
   status: Status
+  isAdmin: boolean
   loading: boolean
   signinWithEmail: (email: string, password: string) => Promise<void> | void
   signinWithGoogle: (redirect?: string) => Promise<void> | void
@@ -30,6 +31,7 @@ type AuthContextType = {
 const AuthContext = React.createContext<AuthContextType>({
   user: null,
   status: 'idle',
+  isAdmin: false,
   loading: true,
   signinWithEmail: () => {},
   signinWithGoogle: () => {},
@@ -130,8 +132,11 @@ function useProvideAuth() {
     }
   }, [])
 
+  const isAdmin = React.useMemo(() => user && user.role === 'admin', [user])
+
   return {
     user,
+    isAdmin,
     status,
     loading: status === 'started',
     signinWithEmail,

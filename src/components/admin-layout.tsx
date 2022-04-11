@@ -1,3 +1,4 @@
+import { useAuth } from '@/lib/auth'
 import cx from 'classnames'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -6,6 +7,8 @@ import { useEffect, useState } from 'react'
 import Header from './header'
 
 export default function AdminLayout({ children, headerTitle = null }) {
+  const { isAdmin, loading } = useAuth()
+
   return (
     <div className='flex min-h-screen flex-col'>
       <Header title={headerTitle} />
@@ -14,13 +17,24 @@ export default function AdminLayout({ children, headerTitle = null }) {
         <nav className='flex flex-col items-start gap-2'>
           <SideLink href='/events'>Events</SideLink>
           <SideLink href='/members'>Members</SideLink>
-          <SideLink href='/admins'>Admins</SideLink>
+          {!isAdmin ? null : <SideLink href='/admins'>Admins</SideLink>}
         </nav>
-        {children}
+
+        {loading ? loadingDivs : children}
       </Layout>
     </div>
   )
 }
+
+const loadingDivs = (
+  <div className='flex flex-col gap-4'>
+    <div className='h-20 w-full animate-pulse rounded-xl bg-slate-100' />
+    <div className='h-20 w-full animate-pulse rounded-xl bg-slate-100' />
+    <div className='h-20 w-full animate-pulse rounded-xl bg-slate-100' />
+    <div className='h-20 w-full animate-pulse rounded-xl bg-slate-100' />
+    <div className='h-20 w-full animate-pulse rounded-xl bg-slate-100' />
+  </div>
+)
 
 function Layout({ children }) {
   return (

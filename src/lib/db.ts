@@ -89,25 +89,6 @@ async function getUserRole(uid: string): Promise<UserRole> {
   return dbUser.get('role')
 }
 
-async function getUsersByEmail(email?: UserType['email']): Promise<UserType[]> {
-  const nonEditorRoles: Extract<UserRole, 'user'>[] = ['user']
-
-  let snapshot = null
-  const snapbase = db
-    .collection(usersCollection)
-    .where('role', 'in', nonEditorRoles)
-
-  if (email) {
-    snapshot = await snapbase.where('email', '==', email).limit(1).get()
-  } else {
-    snapshot = await snapbase.limit(5).get()
-  }
-
-  const users = getItemsFromSnapshot<UserType>(snapshot)
-
-  return users
-}
-
 function createUser(user: Omit<UserType, 'token'>) {
   return db.collection(usersCollection).doc(user.uid).set(user)
 }
@@ -119,6 +100,5 @@ export {
   deleteMember,
   togglePublishMember,
   getUserRole,
-  getUsersByEmail,
   createUser,
 }

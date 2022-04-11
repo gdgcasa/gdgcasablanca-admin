@@ -1,5 +1,6 @@
-import { getEditorUsers } from '@/lib/admin-db'
 import { NextApiRequest, NextApiResponse } from 'next'
+
+import { getEditorUsers } from '@/lib/admin-db'
 import { parseTokenContext } from 'src/utils/get-uid-from-token-context'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
