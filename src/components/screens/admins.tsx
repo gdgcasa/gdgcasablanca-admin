@@ -5,28 +5,26 @@ import { useAuth } from '@/lib/auth'
 import AdminLayout from '../admin-layout'
 
 export default function AdminsScreen() {
-  const { user } = useAuth()
-  const { data, error, mutate } = useSWR<Array<UserType>>('/api/users')
+  const { data, error } = useSWR<Array<UserType>>('/api/users')
 
   if (error) {
-    return <div>There is an error</div>
+    return (
+      <AdminLayout headerTitle='Admins'>
+        <div>There is an error</div>
+      </AdminLayout>
+    )
   }
   if (!data) {
-    return <div>Loading ...</div>
+    return (
+      <AdminLayout headerTitle='Admins'>
+        <div>Loading ...</div>
+      </AdminLayout>
+    )
   }
 
   const admins = data.filter((user) => user.role === 'admin')
   const editors = data.filter((user) => user.role === 'editor')
   const nonEditors = data.filter((user) => user.role === 'user')
-
-  async function changeRole(selectedUser: UserType, role: UserType['role']) {
-    await fetch('/api/members/change-role', {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ role, uid: selectedUser.uid }),
-    })
-    mutate()
-  }
 
   return (
     <AdminLayout headerTitle='Admins'>
