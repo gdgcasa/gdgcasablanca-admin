@@ -1,19 +1,18 @@
 import { useAuth } from '@/lib/auth'
 import Link from 'next/link'
 
-export default function Header({ title = 'Home' }) {
+export default function Header() {
   return (
-    <header className='sticky top-0 z-50 grid grid-cols-1 border-b-2 border-current bg-white sm:grid-cols-3 md:grid-cols-4'>
-      <Link href='/v2'>
-        <a className='flex items-center justify-center border-b-2 border-current px-4 py-3 font-bold sm:border-b-0 sm:border-r-2'>
-          GDG Casa - Admin
-        </a>
-      </Link>
-      <div className='flex items-center justify-between px-4 py-2 sm:col-span-2 md:col-span-3'>
-        <div>{title}</div>
-        <nav className='flex items-center gap-2'>
-          <UserAuth />
-        </nav>
+    <header className='sticky top-0 z-50 border-b bg-white'>
+      <div className='mx-auto grid max-w-5xl grid-cols-1 sm:grid-cols-3 md:grid-cols-4'>
+        <Link href='/'>
+          <a className='px-4 py-3 font-bold'>GDG Casa - Admin</a>
+        </Link>
+        <div className='flex items-center px-4 py-2 sm:col-span-2 sm:justify-end md:col-span-3'>
+          <nav className='flex items-center gap-2'>
+            <UserAuth />
+          </nav>
+        </div>
       </div>
     </header>
   )

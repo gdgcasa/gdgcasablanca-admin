@@ -6,15 +6,19 @@ import { useEffect, useState } from 'react'
 
 import Header from './header'
 
-export default function AdminLayout({ children, headerTitle = null }) {
+export default function AdminLayout({
+  children,
+  mainClassName = '',
+  headerTitle = null,
+}) {
   const { isAdmin, loading } = useAuth()
 
   return (
     <div className='flex min-h-screen flex-col'>
-      <Header title={headerTitle} />
+      <Header />
 
-      <Layout>
-        <nav className='flex flex-col items-start gap-2'>
+      <Layout mainClassName={mainClassName} title={headerTitle}>
+        <nav className='flex flex-col gap-2'>
           <SideLink href='/events'>Events</SideLink>
           <SideLink href='/members'>Members</SideLink>
           {!isAdmin ? null : <SideLink href='/admins'>Admins</SideLink>}
@@ -36,13 +40,21 @@ const loadingDivs = (
   </div>
 )
 
-function Layout({ children }) {
+function Layout({ children, mainClassName, title }) {
   return (
-    <div className='grid flex-grow grid-cols-1 grid-rows-[auto_1fr] sm:grid-cols-3 sm:grid-rows-none md:grid-cols-4'>
-      <aside className='border-b-2 border-current p-4 sm:border-b-0 sm:border-r-2'>
-        {children[0]}
-      </aside>
-      <main className='p-4 sm:col-span-2 md:col-span-3'>{children[1]}</main>
+    <div>
+      <div className='flex h-40 items-end border-b py-8'>
+        <h2 className='mx-auto w-full max-w-5xl px-4 text-3xl font-light'>
+          {title}
+        </h2>
+      </div>
+
+      <div className='mx-auto grid max-w-5xl flex-grow grid-cols-1 grid-rows-[auto_1fr] py-8 sm:grid-cols-3 sm:grid-rows-none md:grid-cols-4'>
+        <aside className='py-4'>{children[0]}</aside>
+        <main className={cx('p-4 sm:col-span-2 md:col-span-3', mainClassName)}>
+          {children[1]}
+        </main>
+      </div>
     </div>
   )
 }
@@ -79,8 +91,8 @@ function SideLink({
         className={cx(
           'rounded px-5 py-2 text-lg font-light transition-colors',
           {
-            'hover:bg-blue-50': !isLinkActive,
-            'bg-blue-500 text-white': isLinkActive,
+            'text-slate-500 hover:bg-slate-50': !isLinkActive,
+            'bg-slate-50 text-slate-900': isLinkActive,
           },
         )}
       >
