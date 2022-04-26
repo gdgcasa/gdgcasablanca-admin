@@ -73,7 +73,7 @@ function UserList({
         return (
           <li
             key={user.uid}
-            className='flex items-baseline gap-2 p-2 hover:bg-slate-100'
+            className='flex flex-wrap items-baseline gap-x-2 gap-y-4 p-2 hover:bg-slate-100'
           >
             <span>{user.name}</span>
             {!isMeText ? null : (
@@ -81,7 +81,7 @@ function UserList({
                 {isMeText}
               </span>
             )}
-            <div className='ml-auto flex gap-2'>
+            <div className='flex gap-2 md:ml-auto'>
               {actions.map((action) => {
                 return (
                   <button

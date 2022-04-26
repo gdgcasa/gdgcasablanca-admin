@@ -1,6 +1,6 @@
-import { changeMemberRole, getAdminUserRole } from '@/lib/admin-db'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { userRoles } from 'src/utils/constants'
+
+import { addNewEvent, getAdminUserRole, getEvents } from '@/lib/admin-db'
 import { parseTokenContext } from 'src/utils/get-uid-from-token-context'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -18,16 +18,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return
   }
 
-  const newRole = req.body.role
-  const uid = req.body.uid
+  const { meetupId, organizers } = req.body
 
-  if (!userRoles.includes(newRole)) {
-    const message = `Unsupported role of "${newRole}"`
-    res.status(400).json({ code: 400, message })
+  const { dbEvents } = await getEvents()
+
+  if (dbEvents.some((event) => event.meetupId === meetupId)) {
+    res.status(200).json({ code: 200, message: 'Event already exists' })
     return
   }
 
-  await changeMemberRole(uid, newRole)
+  try {
+    await addNewEvent(meetupId, organizers)
+  } catch (e) {
+    res.status(500).json({ code: 500, message: 'Internal server error' })
+    return
+  }
 
   res.status(204).end()
 }

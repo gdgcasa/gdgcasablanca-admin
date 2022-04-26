@@ -61,8 +61,6 @@ export default function Home() {
           <MemberForm onSubmit={handleSubmit} />
         </section>
       </main>
-
-      <footer></footer>
     </div>
   )
 }

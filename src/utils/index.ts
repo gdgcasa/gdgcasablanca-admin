@@ -21,4 +21,37 @@ function getItemsFromSnapshot<T extends { id: string } | { uid: string }>(
   return items
 }
 
-export { getUniqueName, getItemsFromSnapshot }
+async function getEventsFromSnapshot<
+  T extends { id: string } | { uid: string },
+>(snapshot: FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData>) {
+  if (!snapshot.empty) {
+    const promises = []
+
+    snapshot.forEach((doc) => {
+      promises.push(
+        new Promise(async (resolve, reject) => {
+          const data = doc.data()
+
+          if (data.organizers.length > 0) {
+            const promises = data.organizers.map((userRef) => userRef.get())
+            const reses = await Promise.all(promises)
+            data.organizers = reses.map((snap) => ({
+              id: snap.id,
+              ...snap.data(),
+            }))
+          }
+
+          resolve({ id: doc.id, ...data } as T)
+        }),
+      )
+    })
+
+    const items: Array<T> = await Promise.all(promises)
+
+    return items
+  }
+
+  return []
+}
+
+export { getUniqueName, getItemsFromSnapshot, getEventsFromSnapshot }

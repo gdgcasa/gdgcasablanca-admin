@@ -23,7 +23,7 @@ export default function Login() {
         <section className='py-4'>
           <button
             type='button'
-            onClick={() => signinWithGoogle('/members')}
+            onClick={() => signinWithGoogle('/events')}
             className='rounded border border-gray-100 bg-white px-4 py-2 text-gray-800 transition-colors hover:bg-gray-100'
           >
             Continue with <span className='font-bold'>Google</span>

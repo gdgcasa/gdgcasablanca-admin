@@ -45,7 +45,7 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
     setLoading(false)
   }
 
-  function handleChangle(event: React.FormEvent<HTMLInputElement>) {
+  function handleChange(event: React.FormEvent<HTMLInputElement>) {
     const name = event.currentTarget.name
 
     // .trim() works here because we're not setting the value back to the input
@@ -73,7 +73,7 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
           placeholder='First name:'
           inputProps={{
             autoComplete: 'off',
-            onChange: handleChangle,
+            onChange: handleChange,
             required: true,
             defaultValue: initialState?.firstname,
           }}
@@ -86,7 +86,7 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
           placeholder='Last name:'
           inputProps={{
             autoComplete: 'off',
-            onChange: handleChangle,
+            onChange: handleChange,
             required: true,
             defaultValue: initialState?.lastname,
           }}
@@ -99,7 +99,7 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
           placeholder='Engineer, student, PhD'
           inputProps={{
             autoComplete: 'off',
-            onChange: handleChangle,
+            onChange: handleChange,
             required: true,
             defaultValue: initialState?.occupation,
           }}
@@ -113,7 +113,7 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
           type='email'
           inputProps={{
             autoComplete: 'off',
-            onChange: handleChangle,
+            onChange: handleChange,
             required: true,
             defaultValue: initialState?.email,
           }}
@@ -128,7 +128,7 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
           placeholder='facebook.com/..., twitter.com/...'
           inputProps={{
             autoComplete: 'off',
-            onChange: handleChangle,
+            onChange: handleChange,
             defaultValue: initialState?.url,
           }}
         />
@@ -149,7 +149,7 @@ export default function MemberForm({ onSubmit, initialState }: IProps) {
             inputProps={{
               autoComplete: 'off',
               accept: 'image/*',
-              onChange: handleChangle,
+              onChange: handleChange,
               required: true,
             }}
           />
