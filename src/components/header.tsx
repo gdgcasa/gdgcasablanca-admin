@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export default function Header() {
   return (
-    <header className='sticky top-0 z-50 border-b bg-white'>
+    <header className='top-0 z-50 border-b bg-white'>
       <div className='mx-auto grid max-w-5xl grid-cols-1 sm:grid-cols-3 md:grid-cols-4'>
         <Link href='/'>
           <a className='px-4 py-3 font-bold'>GDG Casa - Admin</a>

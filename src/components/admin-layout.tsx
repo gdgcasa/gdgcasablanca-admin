@@ -42,9 +42,9 @@ const loadingDivs = (
 
 function Layout({ children, mainClassName, title }) {
   return (
-    <div>
-      <div className='flex h-40 items-end border-b py-8'>
-        <h2 className='mx-auto w-full max-w-5xl px-4 text-3xl font-light'>
+    <div className='flex-grow bg-slate-50/80'>
+      <div className='flex h-32 items-end border-b bg-white py-8'>
+        <h2 className='mx-auto w-full max-w-5xl px-4 text-4xl font-light'>
           {title}
         </h2>
       </div>
@@ -88,13 +88,10 @@ function SideLink({
   return (
     <Link href={href}>
       <a
-        className={cx(
-          'rounded px-5 py-2 text-lg font-light transition-colors',
-          {
-            'text-slate-500 hover:bg-slate-50': !isLinkActive,
-            'bg-slate-50 text-slate-900': isLinkActive,
-          },
-        )}
+        className={cx('rounded px-5 py-2 font-light transition-colors', {
+          'text-slate-500 hover:bg-slate-100 hover:font-medium': !isLinkActive,
+          'bg-slate-50 font-medium text-slate-900': isLinkActive,
+        })}
       >
         {children}
       </a>

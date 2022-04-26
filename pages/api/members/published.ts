@@ -6,9 +6,7 @@ import initMiddleware from '@/lib/init-middlewares'
 
 // Initialize the cors middleware
 const cors = initMiddleware(
-  Cors({
-    origin: ['http://localhost:8000', 'https://gdgcasablanca.com'],
-  }),
+  Cors({ origin: ['http://localhost:8000', 'https://gdgcasablanca.com'] }),
 )
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

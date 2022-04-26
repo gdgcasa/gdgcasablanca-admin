@@ -26,3 +26,47 @@ type UserType = {
   token: string
   role: UserRole
 } | null
+
+// not used for now
+type EventPageType = {
+  link: string
+  name: string
+}
+
+type EventsDataType = {
+  dbEvents: EventType[]
+  events: { [id: string]: EventType }
+  pastEvents: { [id: string]: EventType }
+  allEvents: EventType[]
+}
+
+type OrganizerType = {
+  id: string
+  email: string
+  lastname: string
+  firstname: string
+  isPublic: boolean
+  occupation?: string
+  photo?: string
+  url?: string
+}
+
+type EventType = {
+  // from firebase
+  id: string
+  meetupId: string
+  eventPages: EventPageType[]
+  organizers: OrganizerType[]
+
+  // from meetup
+  title: string
+  is_online_event: boolean
+  date: string
+  eventLink: string
+  timeFrom: StringLike
+  venue: {
+    name: string
+    city: string
+    link: string
+  }
+}

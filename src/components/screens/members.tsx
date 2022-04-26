@@ -68,7 +68,7 @@ function Member({
 
   return (
     <Link href={`/members/${id}/edit`}>
-      <a className='flex flex-col flex-wrap justify-between gap-4 rounded p-2 text-left hover:bg-slate-50 sm:flex-row sm:items-center'>
+      <a className='flex flex-col flex-wrap justify-between gap-4 rounded border bg-white p-4 text-left hover:bg-slate-100 sm:flex-row sm:items-center'>
         <div className='flex items-center gap-4'>
           <Image
             src={photo}

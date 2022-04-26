@@ -1,7 +1,12 @@
-import { membersCollection, usersCollection } from 'src/config'
-import { getItemsFromSnapshot } from 'src/utils'
+import {
+  eventsCollection,
+  membersCollection,
+  usersCollection,
+} from 'src/config'
+import { getEventsFromSnapshot, getItemsFromSnapshot } from 'src/utils'
 
 import admin from './admin-firebase'
+import getMeetupEvents from './meetup-events'
 
 const db = admin.firestore()
 
@@ -52,11 +57,44 @@ async function getEditorUsers(): Promise<UserType[]> {
   return users
 }
 
+async function getEvents(): Promise<EventsDataType> {
+  const snapshot = await db.collection(eventsCollection).get()
+
+  const { events, pastEvents, allPastEvents, allEvents } =
+    await getMeetupEvents()
+  let dbEvents = await getEventsFromSnapshot<EventType>(snapshot)
+
+  dbEvents = dbEvents.map((event) => {
+    const past = allPastEvents?.[event.meetupId]
+    const upcoming = events?.[event.meetupId]
+    const { id: __, ...meetupData } = past ?? upcoming ?? {}
+
+    return { ...event, ...meetupData }
+  })
+
+  return { dbEvents, events, pastEvents, allEvents }
+}
+
 async function changeMemberRole(
   uid: UserType['uid'],
   newRole: UserType['role'],
 ) {
   return db.collection(usersCollection).doc(uid).update({ role: newRole })
+}
+
+async function addNewEvent(meetupId, organizersArray) {
+  const promises = organizersArray.map((id) => {
+    return db
+      .collection(membersCollection)
+      .doc(id)
+      .get()
+      .then((res) => res.ref)
+  })
+  const organizers = await Promise.all(promises)
+
+  const event = { meetupId, organizers }
+
+  return db.collection(eventsCollection).add(event)
 }
 
 export {
@@ -65,4 +103,6 @@ export {
   getAdminUserRole,
   getEditorUsers,
   changeMemberRole,
+  getEvents,
+  addNewEvent,
 }
