@@ -123,7 +123,7 @@ function EventList({ events }: { events: EventType[] }) {
                 </div>
 
                 <div className='hidden gap-2 sm:flex'>
-                  <EventAction href={event.eventLink}>Edit</EventAction>
+                  <EventAction href={`/events/edit/${event.id}`}>Edit</EventAction>
                   <EventAction href={event.eventLink} external>
                     Meetup page
                   </EventAction>
@@ -137,7 +137,7 @@ function EventList({ events }: { events: EventType[] }) {
               </div>
 
               <div className='flex gap-2 sm:hidden'>
-                <EventAction href={event.eventLink}>Edit</EventAction>
+                <EventAction href={`/events/edit/${event.id}`}>Edit</EventAction>
                 <EventAction href={event.eventLink} external>
                   Meetup page
                 </EventAction>

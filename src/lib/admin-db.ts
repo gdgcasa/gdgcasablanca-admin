@@ -57,6 +57,18 @@ async function getEditorUsers(): Promise<UserType[]> {
   return users
 }
 
+async function getEvent(id: string): Promise<EventType | null> {
+  const doc = await db.collection(eventsCollection).doc(id).get()
+
+  if (!doc.exists) {
+    return null
+  }
+
+  const eventWithoutId = doc.data() as Omit<EventType, 'id'>
+
+  return { id: doc.id, ...eventWithoutId }
+}
+
 async function getEvents(): Promise<EventsDataType> {
   const snapshot = await db.collection(eventsCollection).get()
 
@@ -104,5 +116,6 @@ export {
   getEditorUsers,
   changeMemberRole,
   getEvents,
+  getEvent,
   addNewEvent,
 }

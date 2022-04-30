@@ -4,7 +4,6 @@ import Select, { ActionMeta, MultiValue } from 'react-select'
 import useSWR from 'swr'
 
 import AdminLayout from '../admin-layout'
-import Input from '../input'
 import Button from '../ui/button'
 
 export default function AddEventScreen() {
