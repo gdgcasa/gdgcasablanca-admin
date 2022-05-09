@@ -24,14 +24,6 @@ export default function Nav() {
         </Link>
       )}
 
-      {!isAdmin ? null : (
-        <Link href='/admin'>
-          <a className='border-b-2 border-transparent text-teal-600 transition-colors hover:border-current hover:text-teal-800'>
-            Admin Dash
-          </a>
-        </Link>
-      )}
-
       <div className='ml-auto'>
         {!user ? (
           <Link href='/login'>

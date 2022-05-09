@@ -34,6 +34,15 @@ function MembersList() {
 
   return (
     <div className='flex flex-col gap-4'>
+      <Link href='/members/add'>
+        <a className='inline-block self-end whitespace-nowrap rounded-md bg-blue-500 py-2 px-3 text-sm font-semibold text-white hover:bg-blue-600 focus:outline-none focus-visible:ring-1 focus-visible:ring-offset-2 active:shadow-none active:ring-1 active:ring-offset-2'>
+          Add new member
+        </a>
+      </Link>
+
+      <h3 className='whitespace-nowrap text-sm font-bold uppercase text-slate-500'>
+        Organizers ({data.length})
+      </h3>
       {data.map((member) => {
         return <Member {...member} key={member.id} />
       })}
