@@ -3,10 +3,14 @@ import {
   membersCollection,
   usersCollection,
 } from 'src/config'
-import { getEventsFromSnapshot, getItemsFromSnapshot } from 'src/utils'
+import {
+  getEventFromSnapshot,
+  getEventsFromSnapshot,
+  getItemsFromSnapshot,
+} from 'src/utils'
 
 import admin from './admin-firebase'
-import getMeetupEvents from './meetup-events'
+import getMeetupEvents, { getMeetupEvent } from './meetup-events'
 
 const db = admin.firestore()
 
@@ -64,9 +68,11 @@ async function getEvent(id: string): Promise<EventType | null> {
     return null
   }
 
-  const eventWithoutId = doc.data() as Omit<EventType, 'id'>
+  const dbEvent = (await getEventFromSnapshot(doc)) as Omit<EventType, 'id'>
 
-  return { id: doc.id, ...eventWithoutId }
+  const { id: _, ...meetupEvent } = await getMeetupEvent(dbEvent?.meetupId)
+
+  return { id: doc.id, ...dbEvent, ...meetupEvent }
 }
 
 async function getEvents(): Promise<EventsDataType> {
@@ -109,6 +115,21 @@ async function addNewEvent(meetupId, organizersArray) {
   return db.collection(eventsCollection).add(event)
 }
 
+async function updateEvent(id, meetupId, organizersArray) {
+  const promises = organizersArray.map((id) => {
+    return db
+      .collection(membersCollection)
+      .doc(id)
+      .get()
+      .then((res) => res.ref)
+  })
+  const organizers = await Promise.all(promises)
+
+  const event = { meetupId, organizers }
+
+  return db.collection(eventsCollection).doc(id).set(event)
+}
+
 export {
   getMembers,
   getMember,
@@ -118,4 +139,5 @@ export {
   getEvents,
   getEvent,
   addNewEvent,
+  updateEvent,
 }

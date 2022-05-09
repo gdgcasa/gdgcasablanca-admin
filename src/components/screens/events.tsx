@@ -1,3 +1,4 @@
+import { useAuth } from '@/lib/auth'
 import cx from 'classnames'
 import Link from 'next/link'
 import * as React from 'react'
@@ -6,23 +7,26 @@ import useSWR from 'swr'
 import AdminLayout from '../admin-layout'
 
 export default function EventsScreen() {
+  const { loading } = useAuth()
+
   return (
     <AdminLayout
       headerTitle='Events'
       mainClassName='flex flex-col items-start gap-4'
     >
-      <EventsContent />
+      {loading ? <div>loading...</div> : <EventsContent />}
     </AdminLayout>
   )
 }
 
 function EventsContent() {
-  const { data, error } = useSWR<EventsDataType>('/api/events')
+  const { data, error } = useSWR<EventsReturnType>('/api/events')
 
   if (error) return <div>Failed to load</div>
-
   if (!data) return <div>Loading...</div>
-  const { dbEvents } = data
+  if (data.code !== 200) return <div>Failed to load</div>
+
+  const { dbEvents } = data?.data
 
   return (
     <>
@@ -66,7 +70,7 @@ const ArrowUp = ({ className = '' }) => (
   </svg>
 )
 
-function EventAction({
+export function EventAction({
   href,
   className,
   children,
@@ -79,25 +83,34 @@ function EventAction({
 }) {
   const props = React.useMemo(() => {
     if (href) {
-      return {
-        href,
-        target: external ? '_blank' : null,
-      }
+      return { target: external ? '_blank' : null }
     }
     return {}
   }, [href, external])
 
+  const classes = React.useMemo(() => {
+    return cx(
+      'inline-flex h-8 min-w-[70px] items-center justify-center gap-x-2 whitespace-nowrap rounded-md border border-slate-200 px-2.5 py-1 text-sm text-slate-600 transition-colors hover:border-slate-800 hover:text-slate-900',
+      className,
+    )
+  }, [className])
+
+  if (external) {
+    return (
+      <a {...props} href={href} className={classes}>
+        <span>{children}</span>
+        {!external ? null : <ArrowUp className='h-3 w-3 rotate-45' />}
+      </a>
+    )
+  }
+
   return (
-    <a
-      {...props}
-      className={cx(
-        'inline-flex h-8 min-w-[70px] items-center justify-center gap-x-2 whitespace-nowrap rounded-md border border-slate-200 px-2.5 py-1 text-sm text-slate-600 transition-colors hover:border-slate-800 hover:text-slate-900',
-        className,
-      )}
-    >
-      <span>{children}</span>
-      {!external ? null : <ArrowUp className='h-3 w-3 rotate-45' />}
-    </a>
+    <Link href={href}>
+      <a {...props} className={classes}>
+        <span>{children}</span>
+        {!external ? null : <ArrowUp className='h-3 w-3 rotate-45' />}
+      </a>
+    </Link>
   )
 }
 
@@ -109,43 +122,43 @@ function EventList({ events }: { events: EventType[] }) {
       </h3>
       <ul className='w-full space-y-4'>
         {events.map((event) => {
-          return (
-            <li
-              key={event.id}
-              className='flex flex-col items-start gap-y-3 rounded border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-slate-50 hover:shadow-lg sm:items-stretch'
-            >
-              <div className='flex items-start justify-between'>
-                <div>
-                  <div className='text-sm font-bold tracking-wide text-slate-600'>
-                    {event.date}
-                  </div>
-                  <h4 className='text-2xl'>{event.title}</h4>
-                </div>
-
-                <div className='hidden gap-2 sm:flex'>
-                  <EventAction href={`/events/edit/${event.id}`}>Edit</EventAction>
-                  <EventAction href={event.eventLink} external>
-                    Meetup page
-                  </EventAction>
-                </div>
-              </div>
-
-              <div className='text-salte-600'>
-                <span className='font-bold'>{event.organizers.length}</span>{' '}
-                Organizer
-                {event.organizers.length === 1 ? null : 's'}
-              </div>
-
-              <div className='flex gap-2 sm:hidden'>
-                <EventAction href={`/events/edit/${event.id}`}>Edit</EventAction>
-                <EventAction href={event.eventLink} external>
-                  Meetup page
-                </EventAction>
-              </div>
-            </li>
-          )
+          return <SingleEvent event={event} key={event.id} />
         })}
       </ul>
     </>
+  )
+}
+
+function SingleEvent({ event }: { event: EventType }) {
+  return (
+    <li className='flex flex-col items-start gap-y-3 rounded border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-slate-50 hover:shadow-lg sm:items-stretch'>
+      <div className='flex items-start justify-between'>
+        <div>
+          <div className='text-sm font-bold tracking-wide text-slate-600'>
+            {event.date}
+          </div>
+          <h4 className='text-2xl'>{event.title}</h4>
+        </div>
+
+        <div className='hidden gap-2 sm:flex'>
+          <EventAction href={`/events/edit/${event.id}`}>Edit</EventAction>
+          <EventAction href={event.eventLink} external>
+            Meetup page
+          </EventAction>
+        </div>
+      </div>
+
+      <div className='text-salte-600'>
+        <span className='font-bold'>{event.organizers.length}</span> Organizer
+        {event.organizers.length === 1 ? null : 's'}
+      </div>
+
+      <div className='flex gap-2 sm:hidden'>
+        <EventAction href={`/events/edit/${event.id}`}>Edit</EventAction>
+        <EventAction href={event.eventLink} external>
+          Meetup page
+        </EventAction>
+      </div>
+    </li>
   )
 }

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import useSWR from 'swr'
 import AdminLayout from '../admin-layout'
+import { EventAction } from './events'
 
 export default function MembersScreen() {
   return (
@@ -68,7 +69,7 @@ function Member({
 
   return (
     <Link href={`/members/${id}/edit`}>
-      <a className='flex flex-col flex-wrap justify-between gap-4 rounded border bg-white p-4 text-left hover:bg-slate-100 sm:flex-row sm:items-center'>
+      <a className='flex flex-col flex-wrap justify-between gap-4 rounded border border-slate-100 bg-white p-4 text-left shadow-sm transition-all hover:border-slate-50 hover:shadow-md sm:flex-row sm:items-center'>
         <div className='flex items-center gap-4'>
           <Image
             src={photo}
@@ -84,19 +85,13 @@ function Member({
         </div>
         <div className='flex gap-2'>
           {!canEdit ? null : (
-            <Link href={`/members/${id}/publish`}>
-              <a className='rounded border-2 border-current px-2 py-0.5 text-blue-600 hover:bg-blue-50 hover:text-blue-800'>
-                {isPublic ? 'Unpublish' : 'Publish'}
-              </a>
-            </Link>
+            <EventAction href={`/members/${id}/publish`}>
+              {isPublic ? 'Unpublish' : 'Publish'}
+            </EventAction>
           )}
 
           {!isAdmin ? null : (
-            <Link href={`/members/${id}/delete`}>
-              <a className='rounded border-2 border-current px-2 py-0.5 text-red-600 hover:bg-red-50 hover:text-red-800'>
-                Delete
-              </a>
-            </Link>
+            <EventAction href={`/members/${id}/delete`}>Delete</EventAction>
           )}
         </div>
       </a>

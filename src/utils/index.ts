@@ -21,6 +21,17 @@ function getItemsFromSnapshot<T extends { id: string } | { uid: string }>(
   return items
 }
 
+async function getEventFromSnapshot(
+  doc: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>,
+) {
+  const data = doc.data()
+
+  const promises = data.organizers.map((userRef) => userRef.get())
+  const reses = await Promise.all(promises)
+  data.organizers = reses.map((snap) => ({ id: snap.id, ...snap.data() }))
+
+  return data
+}
 async function getEventsFromSnapshot<
   T extends { id: string } | { uid: string },
 >(snapshot: FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData>) {
@@ -29,7 +40,7 @@ async function getEventsFromSnapshot<
 
     snapshot.forEach((doc) => {
       promises.push(
-        new Promise(async (resolve, reject) => {
+        new Promise(async (resolve) => {
           const data = doc.data()
 
           if (data.organizers.length > 0) {
@@ -54,4 +65,9 @@ async function getEventsFromSnapshot<
   return []
 }
 
-export { getUniqueName, getItemsFromSnapshot, getEventsFromSnapshot }
+export {
+  getUniqueName,
+  getItemsFromSnapshot,
+  getEventFromSnapshot,
+  getEventsFromSnapshot,
+}

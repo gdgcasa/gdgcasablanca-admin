@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import * as React from 'react'
-import Select, { ActionMeta, MultiValue } from 'react-select'
+import ReactSelect from 'react-select'
+import type { ActionMeta, MultiValue } from 'react-select'
 import useSWR from 'swr'
 
 import AdminLayout from '../admin-layout'
@@ -14,13 +15,16 @@ export default function AddEventScreen() {
   )
 }
 
+function formatEvent({ title, id, ...other }) {
+  return { ...other, label: title, value: id }
+}
+
 function EventForm() {
   const router = useRouter()
 
   const { data: members } = useSWR<DbMember[]>('/api/members')
 
-  const { data } = useSWR<EventsDataType>('/api/events')
-  const { allEvents, dbEvents } = data ?? {}
+  const { data } = useSWR<EventsReturnType>('/api/events')
 
   const [formDataState, setFormDataState] = React.useState<{
     event: { [id: string]: string } | null
@@ -68,7 +72,13 @@ function EventForm() {
       ...other,
     }))
   }, [members])
+
   const eventOptions = React.useMemo(() => {
+    if (!data || data.code !== 200) {
+      return []
+    }
+    const { allEvents, dbEvents } = data?.data
+
     if (!allEvents || !dbEvents) {
       return []
     }
@@ -76,18 +86,16 @@ function EventForm() {
     const dbEventIds = dbEvents.map((e) => e.meetupId)
     return allEvents
       .filter(({ id }) => !dbEventIds.includes(id))
-      .map(({ title, id, ...other }) => ({
-        ...other,
-        label: title,
-        value: id,
-      }))
-  }, [dbEvents, allEvents])
+      .map(formatEvent)
+  }, [data])
+
+  console.log({ formDataState })
 
   return (
     <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
       <div className='flex flex-col gap-3'>
         <label htmlFor='organizers'>Event:</label>
-        <Select
+        <ReactSelect
           name='event'
           value={formDataState?.['event']}
           onChange={handleChangeSelect}
@@ -96,7 +104,7 @@ function EventForm() {
       </div>
       <div className='flex flex-col gap-3'>
         <label htmlFor='organizers'>Organizers:</label>
-        <Select
+        <ReactSelect
           name='organizers'
           value={formDataState?.['organizers']}
           onChange={handleChangeSelect}

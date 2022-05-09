@@ -1,8 +1,62 @@
 const UPCOMING_EVENTS =
-  'https://api.meetup.com/gdgcasablanca/events?&photo-host=public&page=5'
+  'https://api.meetup.com/gdgcasablanca/events?photo-host=public&page=5'
 
 const NUMBER_OF_PAST_EVENTS = 3
-const PAST_EVENTS = `https://api.meetup.com/gdgcasablanca/events?&photo-host=public&status=past`
+const PAST_EVENTS = `https://api.meetup.com/gdgcasablanca/events?photo-host=public&status=past`
+
+const GET_EVENT_QUERY = `
+  query ($id: ID!) {
+    event(id: $id) {
+      title
+      eventUrl
+      dateTime
+      id
+      is_online_event: isOnline
+      image {
+        id
+        baseUrl
+      }
+      images {
+        preview
+      }
+      venue {
+        name
+        city
+        lat
+        lng
+      }
+    }
+  }
+`
+
+type GenericEventType = { [key: string]: string | { [key: string]: string } }
+
+export async function getMeetupEvent(id: string): Promise<GenericEventType> {
+  const gqlUrl = 'https://api.meetup.com/gql'
+  try {
+    const res = await fetch(gqlUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
+      },
+      body: JSON.stringify({
+        query: GET_EVENT_QUERY,
+        variables: { id },
+      }),
+    })
+    const result = await res.json()
+
+    if (result.errors) {
+      throw new Error(result.errors[0].message)
+    } else {
+      return formatEventV2(result.data.event)
+    }
+  } catch (e) {
+    console.log({ e })
+    return {}
+  }
+}
 
 export default async function getMeetupEvents() {
   const [eventsData, pastEventsData] = await Promise.all([
@@ -58,6 +112,32 @@ export function formatDate(date) {
   const day = eventDate.getDate()
 
   return `${month} ${day}, ${year}`
+}
+
+function formatEventV2(eventData): GenericEventType {
+  const is_online_event = eventData.is_online_event
+  const meetupVenue = eventData.venue
+
+  let link = ''
+  if (!is_online_event && meetupVenue?.lat && meetupVenue?.lon) {
+    link = `https://www.google.com/maps/@${meetupVenue.lat},${meetupVenue.lon},16z`
+  }
+
+  const venue = {
+    name: is_online_event ? 'Online Event' : meetupVenue?.name,
+    city: meetupVenue?.city,
+    link,
+  }
+
+  return {
+    id: eventData.id,
+    title: eventData.title,
+    date: formatDate(eventData.dateTime),
+    eventLink: eventData.eventUrl,
+    timeFrom: '',
+    venue,
+    is_online_event,
+  }
 }
 
 export function formatEvent(eventData) {
