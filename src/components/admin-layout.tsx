@@ -63,10 +63,12 @@ function SideLink({
   href,
   as,
   children,
+  partiallyActive,
 }: {
   href: string
   as?: string
   children: React.ReactNode
+  partiallyActive?: boolean
 }) {
   const { asPath, isReady } = useRouter()
 
@@ -81,9 +83,13 @@ function SideLink({
       // Using URL().pathname to get rid of query and hash
       const activePathname = new URL(asPath, location.href).pathname
 
-      setIsLinkActive(linkPathname === activePathname)
+      setIsLinkActive(
+        partiallyActive
+          ? activePathname.startsWith(linkPathname)
+          : activePathname === linkPathname,
+      )
     }
-  }, [asPath, isReady, as, href])
+  }, [asPath, isReady, as, href, partiallyActive])
 
   return (
     <Link href={href}>

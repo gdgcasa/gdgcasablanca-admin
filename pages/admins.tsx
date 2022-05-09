@@ -32,7 +32,7 @@ export async function getServerSideProps(context) {
   if (!isAdmin) {
     return {
       redirect: {
-        destination: '/members',
+        destination: '/events',
         permanent: false,
       },
     }

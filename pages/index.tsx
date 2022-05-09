@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (uid) {
     return {
       redirect: {
-        destination: '/members',
+        destination: '/events',
         permanent: false,
       },
     }

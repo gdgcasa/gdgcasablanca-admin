@@ -4,12 +4,13 @@ import { userRoles } from 'src/utils/constants'
 import { parseTokenContext } from 'src/utils/get-uid-from-token-context'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { uid: adminUid } = await parseTokenContext(req.headers.cookie)
+  const token = await parseTokenContext(req.headers.cookie)
 
-  if (!adminUid) {
+  if (!token) {
     res.status(401).json({ code: 401, message: 'Unauthorized' })
     return
   }
+  const { uid: adminUid } = token
 
   const role = await getAdminUserRole(adminUid)
   const isAdmin = role === 'admin'
