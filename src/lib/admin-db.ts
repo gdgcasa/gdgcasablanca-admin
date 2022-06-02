@@ -1,3 +1,4 @@
+import { compareDesc } from 'date-fns'
 import {
   eventsCollection,
   membersCollection,
@@ -82,13 +83,19 @@ async function getEvents(): Promise<EventsDataType> {
     await getMeetupEvents()
   let dbEvents = await getEventsFromSnapshot<EventType>(snapshot)
 
-  dbEvents = dbEvents.map((event) => {
-    const past = allPastEvents?.[event.meetupId]
-    const upcoming = events?.[event.meetupId]
-    const { id: __, ...meetupData } = past ?? upcoming ?? {}
+  dbEvents = dbEvents
+    .map((event) => {
+      const past = allPastEvents?.[event.meetupId]
+      const upcoming = events?.[event.meetupId]
+      const { id: __, ...meetupData } = past ?? upcoming ?? {}
 
-    return { ...event, ...meetupData }
-  })
+      return { ...event, ...meetupData }
+    })
+    .sort((eventA, eventB) => {
+      const dateLeft = new Date(eventA.date)
+      const dateRight = new Date(eventB.date)
+      return compareDesc(dateLeft, dateRight)
+    })
 
   return { dbEvents, events, pastEvents, allEvents }
 }

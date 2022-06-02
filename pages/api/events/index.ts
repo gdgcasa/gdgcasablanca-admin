@@ -4,8 +4,10 @@ import { getEvents } from '@/lib/admin-db'
 import { parseTokenContext } from 'src/utils/get-uid-from-token-context'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const isGenerating = req.headers.generating === process.env.SECRECT_GEN_KEY
   const token = await parseTokenContext(req.headers.cookie)
-  if (!token) {
+
+  if (!token && !isGenerating) {
     res.status(401).json({ code: 401, message: 'Unauthorized' })
     return
   }
